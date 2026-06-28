@@ -12,7 +12,7 @@ Personal knowledge base and idea incubation space at the intersection of AI, hum
 
 ## Location
 `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Aporium`
-(Not in `workspace/` — iCloud vault. Bare git repo at `~/Code Projects Local/Aporium-dev-state/`)
+(Not in `workspace/` — iCloud vault. Bare git repo at `~/workspace/Aporium-dev-state/`)
 
 ## Stack
 - Obsidian (vault + plugins)
