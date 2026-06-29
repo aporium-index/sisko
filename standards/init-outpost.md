@@ -47,8 +47,8 @@ Read these to understand what's expected:
 | Recent push | Pushed within stale_threshold_days | standards/git.md § Always Commit + Push |
 | State file OKF frontmatter valid | State file starts with `---`, has `type: project`, `tags`, `timestamp` | standards/okf.md, standards/outpost-state.md § Field Reference |
 | State file body sections present | All 10 body sections present (including `## Template Feedback`) | standards/outpost-state.md § Body Section Reference |
-| has_agents_md accurate | Matches reality | State file frontmatter |
-| has_gitignore accurate | Matches reality | State file frontmatter |
+| has_agents_md accurate | Matches reality — true only if file EXISTS AND is compliant | State file frontmatter |
+| has_gitignore accurate | Matches reality — true only if file EXISTS AND meets git.md minimum | State file frontmatter |
 | last_active current | Within stale_threshold_days | State file frontmatter |
 
 **Note:** `has_gitignore: true` means the file exists — it does NOT mean the .gitignore meets the git.md minimum. Check contents separately. If the file exists but is missing required entries, `has_gitignore` stays `true` and the gap goes in `## Compliance Gaps`.
@@ -64,12 +64,15 @@ The state file already exists. Update it:
 - slug, name, category, domain — identity
 - description — move any existing body description here
 - location — path on disk
-- primary_language, languages, frameworks, platform — from exploration
-- repo_url, repo_type, default_branch — from exploration
-- has_agents_md, has_gitignore — set true/false based on audit
-- last_active, last_checkin, timestamp — set to today
+- primary_language, languages, frameworks, runtimes, models, platform — from exploration
+- repo_url, repo_type, default_branch, repo_layout, submodule_count — from exploration
+- test_command, ci, hardware_requirements — from exploration (null/false if none)
+- has_agents_md, has_gitignore — set true ONLY if file exists AND meets standards
+- last_active, last_code_activity, last_checkin, timestamp — set to today
 - tags — 3-5 keywords
-- file_version — set to "1.1"
+- file_version — set to "1.2"
+
+To find `last_code_activity`: `git log --format='%cd' --date=short -- ':!*-state.md' ':!AGENTS.md' ':!*.md' | head -1`
 
 **YAML fields to NOT touch:**
 - phase, status, condition — ADAMA assigns

@@ -13,6 +13,7 @@ Every repo carries one status file: `<slug>-state.md`. ADAMA's `outposts/` direc
 | Field group | Writer | When |
 |---|---|---|
 | Identity, description, location, stack | Outpost agent or human | At init, then on change |
+| Repository layout, verification | Outpost agent | At init, then on change |
 | Compliance fields | Outpost agent | Re-checked on every session end |
 | Phase, condition, priority, criticality, owner | **ADAMA** (or human) | During check-in only |
 | Temporal fields | Automated | On every write |
@@ -82,14 +83,25 @@ primary_language: markdown
 languages: []
 primary_framework: obsidian
 frameworks: []
-platform: cross-platform
+runtimes: []
+models: []
+platform: [cross-platform]
 
 # ── Repository ──
 repo_url: https://github.com/aporium-index/aporium-vault
 repo_type: bare
 default_branch: master
+repo_layout: standard
+submodule_count: 0
+
+# ── Verification ──
+test_command: null
+ci: false
+hardware_requirements: null
 
 # ── Compliance ──
+# has_agents_md / has_gitignore: true only if file EXISTS AND meets standards.
+# If file exists but is non-compliant, set false and list gap in ## Compliance Gaps.
 has_agents_md: true
 has_gitignore: true
 
@@ -108,6 +120,7 @@ owner_type: human
 
 # ── Temporal ──
 last_active: 2026-06-28
+last_code_activity: 2026-06-28
 last_checkin: 2026-06-28
 timestamp: 2026-06-28
 stale_threshold_days: 14
@@ -118,7 +131,7 @@ depended_on_by: []
 
 # ── Meta ──
 tags: [knowledge-base, obsidian, wiki, llm]
-file_version: "1.1"
+file_version: "1.2"
 ---
 
 # {{ name }}
@@ -178,9 +191,9 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 
 ## Template Feedback
 
-- OKF `status` field collides with lifecycle `status` — consider renaming one.
-- `primary_framework: none` is awkward for repos with no framework.
-- `domain` is a free string — consider a small enum for dashboard grouping.
+- ~~OKF `status` field collides with lifecycle `status`~~ — resolved (OKF renamed to `publication_status`)
+- `primary_framework: none` is awkward for repos with no framework — omit the field instead
+- `domain` is a free string — consider a small enum for dashboard grouping
 ```
 
 ## Field Reference
@@ -208,9 +221,11 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 |-------|----------|------|--------|
 | `primary_language` | yes | string | Outpost |
 | `languages` | no | list | Outpost |
-| `primary_framework` | no | string | Outpost |
-| `frameworks` | no | list | Outpost |
-| `platform` | no | enum | Outpost |
+| `primary_framework` | no | string | Outpost — omit if none |
+| `frameworks` | no | list | Outpost — libraries/SDKs the code imports |
+| `runtimes` | no | list | Outpost — host environments (e.g., `ableton-live-12`, `python-3.11`) |
+| `models` | no | list | Outpost — ML model artifacts loaded at runtime (e.g., `demucs-htdemucs`) |
+| `platform` | no | list of enum | Outpost — list, single value for most outposts |
 
 ### Repository
 | Field | Required | Type | Set by |
@@ -218,13 +233,22 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 | `repo_url` | no | string | Outpost |
 | `repo_type` | yes | enum | Outpost |
 | `default_branch` | no | string | Outpost |
+| `repo_layout` | no | enum | Outpost |
+| `submodule_count` | no | int | Outpost — only when `repo_layout: submodule-superproject` |
 | `sensitivity` | no | enum | Outpost |
+
+### Verification
+| Field | Required | Type | Set by |
+|-------|----------|------|--------|
+| `test_command` | no | string | Outpost — command to run tests, null if none |
+| `ci` | no | bool | Outpost — has CI workflow? |
+| `hardware_requirements` | no | string | Outpost — hardware/gates that can't be CI-tested |
 
 ### Compliance
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
-| `has_agents_md` | yes | bool | Outpost |
-| `has_gitignore` | yes | bool | Outpost |
+| `has_agents_md` | yes | bool | Outpost — true only if file EXISTS AND meets standards |
+| `has_gitignore` | yes | bool | Outpost — true only if file EXISTS AND meets git.md minimum |
 
 ### Lifecycle
 | Field | Required | Type | Set by |
@@ -248,7 +272,8 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 ### Temporal
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
-| `last_active` | yes | date | Automated |
+| `last_active` | yes | date | Automated — any push |
+| `last_code_activity` | no | date | Automated — last commit touching non-state, non-docs files |
 | `last_checkin` | yes | date | Automated |
 | `timestamp` | yes | date | Automated |
 | `stale_threshold_days` | no | int | ADAMA |
@@ -301,8 +326,11 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 ### sensitivity
 `public` | `internal` | `confidential` | `restricted`
 
-### platform
-`macos` | `web` | `cli` | `cross-platform` | `cloud`
+### platform (list of enum)
+`macos` | `web` | `cli` | `cross-platform` | `cloud` | `linux`
+
+### repo_layout
+`standard` | `submodule-superproject` | `monorepo`
 
 ### owner_type
 `human` | `agent` | `team`

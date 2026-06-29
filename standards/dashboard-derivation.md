@@ -42,6 +42,7 @@ Every `.md` file in `outposts/` is a symlink to a real state file in its repo. T
 | Priority | `priority` | Raw value |
 | Tier | `criticality` | Raw value |
 | Last Active | `last_active` | Date, with staleness indicator if threshold exceeded |
+| Last Code | `last_code_activity` | Date of last non-state/non-docs commit. Falls back to `last_active` if absent. |
 | Focus | — | First line of `## Current Focus` body section |
 
 ### Sorting

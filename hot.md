@@ -10,6 +10,18 @@ Chronological change log for the workspace. Newest at top.
 
 ## 2026-06-28
 
+### ADAMA — Template v1.2 (6 open jamboree feedback items)
+- `runtimes` + `models` optional list fields (orchestration stacks)
+- `platform` changed scalar → list of enum (hybrid platforms)
+- `repo_layout` + `submodule_count` fields (submodule superprojects)
+- `has_gitignore`/`has_agents_md` now mean compliant, not just exists
+- `test_command` + `ci` + `hardware_requirements` verification fields
+- `last_code_activity` temporal field (admin vs product activity)
+- `primary_framework` omit-when-none convention
+- init-outpost.md updated with new fields + `last_code_activity` git command
+- dashboard-derivation.md updated with `last_code_activity` column
+- file_version bumped to 1.2
+
 ### ADAMA — Sisko purge + standards check
 - bin/serve: `SISKO_ROOT` → `ADAMA_ROOT` (3 references) — last sisko→ADAMA rename leftover
 - bin/check-standards: new script — 7 checks for retired enums (`operational`, `commissioning`, `transiting`), retired `state` field, retired `## Next Actions` section, OKF bare `status:`, legacy `sisko` name. All passing.

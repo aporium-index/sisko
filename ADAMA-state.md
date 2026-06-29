@@ -12,12 +12,18 @@ location: ~/workspace/ADAMA/
 location_note: Self-hosted — ADAMA's own state file lives here and is symlinked into outposts/ for uniform discovery
 primary_language: markdown
 languages: [python]
-primary_framework: none
 frameworks: []
-platform: cross-platform
+runtimes: []
+models: []
+platform: [cross-platform]
 repo_url: https://github.com/aporium-index/ADAMA
 repo_type: github
 default_branch: master
+repo_layout: standard
+submodule_count: 0
+test_command: null
+ci: false
+hardware_requirements: null
 sensitivity: internal
 has_agents_md: true
 has_gitignore: true
@@ -29,20 +35,21 @@ criticality: tier-0
 owner: josh
 owner_type: human
 last_active: 2026-06-28
+last_code_activity: 2026-06-28
 last_checkin: 2026-06-28
 timestamp: 2026-06-28
 stale_threshold_days: 7
 depends_on: []
 depended_on_by: [_aporium, basicly, jamboree, quotaz, prosodymaker, mac-optimization-audit, ml-feedback-program]
 tags: [control-plane, meta, markdown, standards, dashboard]
-file_version: "1.1"
+file_version: "1.2"
 ---
 
 # ADAMA
 
 ## Current Focus
 
-Sisko legacy fully purged (bin/serve renamed). Standards self-consistency check script added (`bin/check-standards`) — 7 checks, all passing. Next: roll init to quotaz, or tackle dashboard background service.
+Template v1.2 landed: 6 open jamboree feedback items resolved (orchestration stacks, hybrid platforms, submodule superprojects, compliance booleans, verification commands, admin vs code activity). Next: touch up jamboree, roll init to quotaz.
 
 ## Full Backlog
 
@@ -52,6 +59,7 @@ Sisko legacy fully purged (bin/serve renamed). Standards self-consistency check 
 - [x] Append hot.md entry for phase model overhaul + this audit
 - [x] **Rename legacy `SISKO_ROOT` variable in bin/serve** — all 3 references renamed to `ADAMA_ROOT`
 - [x] **Standards self-consistency check** — `bin/check-standards` script: 7 checks for retired enums, field names, section names, legacy names; run after any standards change
+- [x] **Implement 6 open template feedback items from jamboree** — v1.2: `runtimes`/`models` fields, `platform` → list, `repo_layout`/`submodule_count`, compliance booleans = compliant not just exists, `test_command`/`ci`/`hardware_requirements`, `last_code_activity`
 - [ ] Dashboard as persistent background service (launchd) — currently manual start via Serve Dashboard.command
 - [ ] AGENTS.md rollout for jamboree, quotaz, mac-optimization-audit, ml-feedback-program (see dashboard.md compliance table)
 - [ ] Versioned release process for standards — CHANGELOG or version bump automation
@@ -88,6 +96,7 @@ Threshold: when all non-dormant outposts reach `outpost` phase with `condition-g
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-06-28 | Template v1.2 — 6 open jamboree feedback items resolved | Added `runtimes`, `models`, `repo_layout`, `submodule_count`, `test_command`, `ci`, `hardware_requirements`, `last_code_activity`; `platform` scalar→list; compliance booleans now mean compliant not just exists; `primary_framework` omit-when-none convention. All additive — no state file breaks |
 | 2026-06-28 | Added `bin/check-standards` self-consistency script | dashboard-derivation.md drifted from outpost-state.md after phase model; a grep for retired values catches this class of error. 7 checks, all passing |
 | 2026-06-28 | Renamed `SISKO_ROOT` → `ADAMA_ROOT` in bin/serve | Last sisko→ADAMA rename leftover; cosmetic but confusing for future agents |
 | 2026-06-28 | Added Backlog Hygiene rule to agents.md | Agent suggested already-completed actions because backlog items weren't marked done in the same commit; also added "end with suggestions" rule |
@@ -127,18 +136,30 @@ Threshold: when all non-dormant outposts reach `outpost` phase with `condition-g
 
 ## Template Feedback
 
-This is ADAMA reviewing its own template. The gaps below are real and worth fixing at the standards level:
+This is ADAMA reviewing its own template. Gaps tracked from init reviews. Resolved items struck through.
 
 1. ~~**Section-name contradiction between standards.**~~ **Resolved** — agents.md now references `## Full Backlog` per the Top-Three Backlog Rule.
 
-2. **`dashboard-derivation.md` did not get migrated with the phase model.** Suggests standards changes aren't being validated against each other. A pre-commit or session-end hook that greps standards for retired enum values (`operational`, `commissioning`, `transiting`) would catch this class of drift. ~~**Resolved** — dashboard-derivation.md migrated.~~ The meta-point stands: no standards self-consistency check exists.
+2. ~~**`dashboard-derivation.md` did not get migrated with the phase model.**~~ **Resolved** — dashboard-derivation.md migrated. `bin/check-standards` now catches this class of drift.
 
-3. **No `standards/` self-consistency check in the template.** The audit checklist in the init prompt checks outpost files against standards, but nothing checks standards against each other. ADAMA is the one outpost where this matters most. Consider a `standards/consistency.md` meta-standard or a verification script.
+3. ~~**No `standards/` self-consistency check.**~~ **Resolved** — `bin/check-standards` script added (7 checks, all passing).
 
-4. ~~**`primary_framework: none` is awkward.**~~ Still open — for infra/meta repos with no framework, the field could simply be omitted (it's optional per the field reference). Clarify whether `none` is a documented sentinel or whether the field should be absent.
+4. ~~**`primary_framework: none` is awkward.**~~ **Resolved** — v1.2 convention: omit the field when no framework. ADAMA-state.md now omits it.
 
-5. **`domain` is a free string.** ADAMA's `domain: meta` is underspecified compared to Aporium's `ai-psychology`. Consider a small enum or convention note (e.g., `meta`, `infra`, `product`, `research`, `personal`) so dashboards can group by domain.
+5. **`domain` is a free string.** ADAMA's `domain: meta` is underspecified compared to Aporium's `ai-psychology`. Consider a small enum or convention note (e.g., `meta`, `infra`, `product`, `research`, `personal`) so dashboards can group by domain. **Open.**
 
-6. **`category: control-plane` exists in the enum** but `control-plane` is the only outpost that will ever use it, and it overlaps with `infrastructure`. Consider whether `control-plane` is distinct enough, or fold into `infrastructure` with a `role: control-plane` field.
+6. **`category: control-plane` exists in the enum** but `control-plane` is the only outpost that will ever use it, and it overlaps with `infrastructure`. Consider whether `control-plane` is distinct enough, or fold into `infrastructure` with a `role: control-plane` field. **Open.**
 
-7. ~~**The audit prompt's table lists `has_agents_md` and `has_gitignore` as "Matches reality" checks** but doesn't ask the reviewer to verify the .gitignore *contents* meet the git.md minimum — only that the file exists.~~ **Resolved** — init-outpost.md audit checklist now checks .gitignore contents.
+7. ~~**Audit checklist didn't verify .gitignore contents.**~~ **Resolved** — init-outpost.md now checks contents, not just existence.
+
+8. ~~**`has_gitignore: true` conflates existence with compliance.**~~ **Resolved** — v1.2 convention: `has_gitignore`/`has_agents_md` are true only if file exists AND meets standards. Non-compliant → false + gap in `## Compliance Gaps`.
+
+9. ~~**Model orchestration stacks (jamboree feedback #3).**~~ **Resolved** — v1.2 adds `runtimes` and `models` optional list fields.
+
+10. ~~**Hybrid platforms (jamboree feedback #4).**~~ **Resolved** — v1.2: `platform` changed from scalar to list of enum.
+
+11. ~~**Submodule superprojects (jamboree feedback #5).**~~ **Resolved** — v1.2 adds `repo_layout` and `submodule_count` fields.
+
+12. ~~**Verification commands (jamboree feedback #7).**~~ **Resolved** — v1.2 adds `test_command`, `ci`, `hardware_requirements` fields.
+
+13. ~~**Admin vs substantive activity (jamboree feedback #8).**~~ **Resolved** — v1.2 adds `last_code_activity` temporal field.
