@@ -26,6 +26,8 @@ submodule_count: 0
 test_command: null
 ci: false
 hardware_requirements: null
+evidence_as_of: null
+verification_scope: null
 sensitivity: internal
 has_agents_md: true
 has_gitignore: true
@@ -46,14 +48,14 @@ stale_threshold_days: 7
 depends_on: []
 depended_on_by: [_aporium, basicly, jamboree, quotaz, prosodymaker, mac-optimization-audit, ml-feedback-program]
 tags: [control-plane, meta, markdown, standards, dashboard]
-file_version: "1.3"
+file_version: "1.4"
 ---
 
 # ADAMA
 
 ## Current Focus
 
-Template v1.3 landed: 6 quotaz feedback items resolved (`local_models` rename, `interfaces`/`platform` split, `## Health Risks` section, `stack_categories` map, `maturity` field, `last_push` temporal). Next: touch up jamboree + quotaz state files to v1.3, roll init to remaining outposts.
+Template v1.4: 5 mac-optimization-audit feedback items resolved (stale has_gitignore note, dormant exemption, `documentation` interface, evidence provenance fields, freshness semantics). Next: touch up existing state files to current template, roll init to ml-feedback-program.
 
 ## Full Backlog
 
@@ -66,10 +68,12 @@ Template v1.3 landed: 6 quotaz feedback items resolved (`local_models` rename, `
 - [x] **Implement 6 open template feedback items from jamboree** — v1.2: `runtimes`/`models` fields, `platform` → list, `repo_layout`/`submodule_count`, compliance booleans = compliant not just exists, `test_command`/`ci`/`hardware_requirements`, `last_code_activity`
 - [x] **Template v1.3: 3 adopt-now quotaz items** — `models` → `local_models`, split `platform` into `interfaces` + `platform`, added `## Health Risks` body section
 - [x] **Template v1.3: 3 worth-considering quotaz items** — `stack_categories` map for structured stack, `maturity` enum (prototype/pre-release/stable), `last_push` temporal field
-- [ ] Touch up jamboree-state.md — apply v1.3 fields, strike through resolved feedback, align top-3 marking
-- [ ] Touch up quotaz-state.md — apply v1.3 fields (`local_models`, `interfaces`, `stack_categories`, `maturity`, `last_push`, `## Health Risks`)
+- [x] **Template v1.4: 5 mac-optimization-audit items** — stale `has_gitignore` note removed, dormant exemption from top-three rule, `documentation` interface enum, `evidence_as_of`/`verification_scope` fields, freshness semantics in dashboard-derivation.md
+- [ ] Touch up jamboree-state.md — apply v1.4 fields, strike through resolved feedback, align top-3 marking
+- [ ] Touch up quotaz-state.md — apply v1.4 fields, strike through resolved feedback
+- [ ] Touch up mac-optimization-audit-state.md — add `evidence_as_of`/`verification_scope` fields, change `## Full Backlog` to `## Reactivation Checklist`, update `interfaces` to include `documentation`
 - [ ] Dashboard as persistent background service (launchd) — currently manual start via Serve Dashboard.command
-- [ ] AGENTS.md rollout for jamboree, quotaz, mac-optimization-audit, ml-feedback-program (see dashboard.md compliance table)
+- [ ] AGENTS.md rollout for jamboree, quotaz, ml-feedback-program (see dashboard.md compliance table)
 - [ ] Versioned release process for standards — CHANGELOG or version bump automation
 - [ ] Consider enriching README.md (currently a stub: `# ADAMA`)
 
@@ -108,6 +112,7 @@ Threshold: when all non-dormant outposts reach `outpost` phase with `condition-g
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-06-29 | Template v1.4 — 5 mac-optimization-audit feedback items | Removed stale has_gitignore note; dormant exemption from top-three rule (`## Reactivation Checklist`); `documentation` interface enum; `evidence_as_of`/`verification_scope` fields; freshness semantics in dashboard-derivation.md |
 | 2026-06-28 | Template v1.3 — 6 quotaz feedback items | `models`→`local_models`, split `platform` into `interfaces`+`platform`, `## Health Risks` body section, `stack_categories` map, `maturity` enum, `last_push` temporal. All additive |
 | 2026-06-28 | Template v1.2 — 6 open jamboree feedback items resolved | Added `runtimes`, `models`, `repo_layout`, `submodule_count`, `test_command`, `ci`, `hardware_requirements`, `last_code_activity`; `platform` scalar→list; compliance booleans now mean compliant not just exists; `primary_framework` omit-when-none convention. All additive — no state file breaks |
 | 2026-06-28 | Added `bin/check-standards` self-consistency script | dashboard-derivation.md drifted from outpost-state.md after phase model; a grep for retired values catches this class of error. 7 checks, all passing |

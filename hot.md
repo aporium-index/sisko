@@ -10,6 +10,16 @@ Chronological change log for the workspace. Newest at top.
 
 ## 2026-06-28
 
+## 2026-06-29
+
+### ADAMA — Template v1.4 (5 mac-optimization-audit feedback items)
+- Removed stale `has_gitignore` note in init-outpost.md (said "true means file exists" — contradicted v1.2 convention)
+- Dormant outposts exempt from top-three rule: `## Reactivation Checklist` replaces `## Full Backlog` when `status: dormant`
+- `documentation` added to `interfaces` enum (audit/docs repos primary interface is not a script)
+- `evidence_as_of` + `verification_scope` optional fields — for audit/research outposts where findings expire with OS/hardware/app versions
+- Freshness semantics clarified in dashboard-derivation.md: `last_active` (liveness) vs `last_code_activity` (product velocity) vs `last_push` (remote sync)
+- file_version bumped to 1.4
+
 ### ADAMA — Template v1.3 (6 quotaz feedback items)
 - `models` → `local_models` (evaluators catalog remote models but load none locally)
 - `platform` split into `interfaces` (cli/web/tui/api/gui) + `platform` (macos/linux/cross-platform)

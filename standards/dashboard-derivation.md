@@ -62,6 +62,18 @@ If `last_active` exceeds `stale_threshold_days` from today:
 - Append `⚠` to the Last Active cell
 - Also triggers `condition: yellow-alert` at next check-in if not already
 
+### Freshness Semantics
+
+Three temporal fields measure different kinds of freshness. The dashboard must not confuse them:
+
+| Field | Measures | Dashboard Use |
+|-------|----------|---------------|
+| `last_active` | Any commit (state file, docs, code) | Liveness — is this outpost touched at all? Staleness indicator uses this. |
+| `last_code_activity` | Last commit touching non-state, non-docs files | Product velocity — is substantive development happening? Falls back to `last_active` if absent. |
+| `last_push` | Last successful `git push` to remote | Remote sync — is local work visible? Falls back to `last_active` if absent. |
+
+A state-file-only review updates `last_active` but not `last_code_activity`. The dashboard should show `last_code_activity` (or `last_active` fallback) in the "Last Code" column so administrative reviews don't make product development look more recent than it is.
+
 ## Control Plane Health (aggregations)
 
 Every field in the health section is derived:

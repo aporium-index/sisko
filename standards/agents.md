@@ -27,6 +27,8 @@ timestamp: 2026-06-28
 ## Top-Three Backlog Rule
 The `## Full Backlog` section (per `outpost-state.md` template) holds all next actions in priority order. The **top three** items are the outpost's immediate focus — the three that unblock the most downstream work. If there are more than three candidates, pick three and demote the rest below a visible separator. If there are fewer than three candidates, the outpost is idle or needs direction — flag it in `## Open Decisions` or `## Blockers`.
 
+**Dormant exemption:** When `status: dormant`, replace `## Full Backlog` with `## Reactivation Checklist` — conditions that must be true before reactivating (e.g., "baseline refreshed," "symptom reproduced"). No minimum item count. The top-three rule does not apply to dormant outposts.
+
 ## Backlog Hygiene
 - **Mark done immediately.** When you complete a backlog item, mark it `[x]` in the same commit. Never leave completed work as `[ ]` — it causes duplicate suggestions and makes the outpost look idle.
 - **Never suggest already-taken actions.** Before proposing a next action, verify it isn't already done or in progress. Read the backlog and recent git log before suggesting.

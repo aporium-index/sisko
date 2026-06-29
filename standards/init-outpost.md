@@ -51,9 +51,7 @@ Read these to understand what's expected:
 | has_gitignore accurate | Matches reality — true only if file EXISTS AND meets git.md minimum | State file frontmatter |
 | last_active current | Within stale_threshold_days | State file frontmatter |
 
-**Note:** `has_gitignore: true` means the file exists — it does NOT mean the .gitignore meets the git.md minimum. Check contents separately. If the file exists but is missing required entries, `has_gitignore` stays `true` and the gap goes in `## Compliance Gaps`.
-
-For each gap: cite the specific standard and describe the fix. Collect every next action — top 3 go in the state file, rest in `## Full Backlog`.
+For each gap: cite the specific standard and describe the fix. Collect every next action — top 3 go in the state file, rest in `## Full Backlog`. Dormant outposts use `## Reactivation Checklist` instead of `## Full Backlog` (see agents.md § Top-Three Backlog Rule).
 
 ## Step 4 — Update the State File
 
@@ -67,7 +65,7 @@ The state file already exists. Update it:
 - primary_language, languages, frameworks, runtimes, local_models, interfaces, platform — from exploration
 - stack_categories — optional; use when `frameworks` flattening is lossy (e.g., `{runtime: [...], test: [...], build: [...]}`)
 - repo_url, repo_type, default_branch, repo_layout, submodule_count — from exploration
-- test_command, ci, hardware_requirements — from exploration (null/false if none)
+- test_command, ci, hardware_requirements, evidence_as_of, verification_scope — from exploration (null if not applicable)
 - has_agents_md, has_gitignore — set true ONLY if file exists AND meets standards
 - last_active, last_code_activity, last_push, last_checkin, timestamp — set to today
 - tags — 3-5 keywords

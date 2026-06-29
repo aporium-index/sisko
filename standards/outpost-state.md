@@ -100,6 +100,8 @@ submodule_count: 0
 test_command: null
 ci: false
 hardware_requirements: null
+evidence_as_of: null
+verification_scope: null
 
 # ── Compliance ──
 # has_agents_md / has_gitignore: true only if file EXISTS AND meets standards.
@@ -135,7 +137,7 @@ depended_on_by: []
 
 # ── Meta ──
 tags: [knowledge-base, obsidian, wiki, llm]
-file_version: "1.3"
+file_version: "1.4"
 ---
 
 # {{ name }}
@@ -253,6 +255,8 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 | `test_command` | no | string | Outpost — command to run tests, null if none |
 | `ci` | no | bool | Outpost — has CI workflow? |
 | `hardware_requirements` | no | string | Outpost — hardware/gates that can't be CI-tested |
+| `evidence_as_of` | no | date | Outpost — date when evidence/measurements were captured. Use for audit/research outposts where findings expire with OS, app, or hardware versions |
+| `verification_scope` | no | string | Outpost — what the verification covers and what it doesn't (e.g., "syntax check only; no runtime validation") |
 
 ### Compliance
 | Field | Required | Type | Set by |
@@ -302,7 +306,8 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 |---------|----------|---------|
 | `# {{ name }}` | yes | Title |
 | `## Current Focus` | yes | What's being worked on. One sentence |
-| `## Full Backlog` | yes | All next actions, prioritized. Top 3 marked with bold label prefix |
+| `## Full Backlog` | yes (active) | All next actions, prioritized. Top 3 marked with bold label prefix. Replaced by `## Reactivation Checklist` when dormant |
+| `## Reactivation Checklist` | yes (dormant) | Conditions that must be true before reactivating. No minimum item count. Used when `status: dormant` |
 | `## Blockers` | yes | What's stopped and why. "None." if empty |
 | `## Health Risks` | yes | Degradations that don't stop work but should be tracked (broken typecheck, failing lint, strategic gates). "None." if empty |
 | `## Compliance Gaps` | yes | Standards violations with fixes. "None." if clean |
@@ -343,7 +348,7 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 `macos` | `web` | `cli` | `cross-platform` | `cloud` | `linux`
 
 ### interfaces (list of enum)
-`cli` | `web` | `tui` | `api` | `gui` | `none`
+`cli` | `web` | `tui` | `api` | `gui` | `documentation` | `none`
 
 ### maturity
 `prototype` (works but pre-decision) | `pre-release` (feature-complete, polishing) | `stable` (production-ready). Null when phase is `brief` or outpost is clearly committed.
