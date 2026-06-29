@@ -6,7 +6,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 try:
     SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-    SISKO_ROOT = os.path.dirname(SCRIPT_DIR)
+    SISKO_ROOT = SCRIPT_DIR  # this file lives in sisko root, not bin/
     WORKSPACE_ROOT = os.path.dirname(SISKO_ROOT)
     PORT = 8080
 
