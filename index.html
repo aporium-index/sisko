@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>sisko dashboard</title>
+<title>ADAMA dashboard</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 1100px; margin: 0 auto; padding: 24px; background: #0d1117; color: #c9d1d9; }
@@ -56,13 +56,13 @@
 </style>
 </head>
 <body>
-<h1>sisko dashboard</h1>
+<h1>ADAMA dashboard</h1>
 <p class="subtitle">Live &mdash; reads outpost state files on every load. Click a row to expand.</p>
 
 <div class="stats" id="stats"></div>
 <div class="section-title">All Outposts</div>
 <div id="table-container"><p class="loading">loading outposts&hellip;</p></div>
-<p class="footer">sisko control plane &middot; <code>Serve Dashboard.command</code></p>
+<p class="footer">ADAMA control plane &middot; <code>Serve Dashboard.command</code></p>
 
 <script>
 var OUTPOSTS_DIR = 'outposts';
@@ -299,7 +299,7 @@ function renderAll(outposts) {
 async function loadAll() {
   var slugs = await discoverSlugs();
   if (!slugs.length) {
-    slugs = ['sisko', '_aporium', 'basicly', 'jamboree', 'quotaz',
+    slugs = ['ADAMA', '_aporium', 'basicly', 'jamboree', 'quotaz',
              'prosodymaker', 'mac-optimization-audit', 'ml-feedback-program'];
   }
 

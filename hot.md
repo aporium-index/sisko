@@ -10,7 +10,7 @@ Chronological change log for the workspace. Newest at top.
 
 ## 2026-06-28
 
-### sisko — Architecture consolidation
+### ADAMA — Architecture consolidation
 - Replaced `projects/` → `outposts/` (distinct term, no collision risk)
 - State files replace PROJECT.md: each outpost has `<slug>-state.md` in repo root
 - `outposts/` now contains symlinks pointing to real state files — zero duplication
@@ -21,11 +21,11 @@ Chronological change log for the workspace. Newest at top.
 - Updated `git.md` (always commit + push)
 - Aporium dev-state dir renamed: `Aporium-dev-state` → `_aporium`
 
-### sisko — Bootstrap
+### ADAMA — Bootstrap
 - Initialized control plane repo
 - Created AGENTS.md, PROJECTS.md, dashboard.md, standards/ (git, agents, okf)
 - obsidian-skills cloned to `~/.opencode/skills/obsidian-skills`
-- OKF frontmatter applied to all sisko files
+- OKF frontmatter applied to all ADAMA files
 - Skills consolidated to `~/.opencode/skills/` (single canonical location)
 - Custom agent definitions wiped (`~/.config/opencode/agent/` deleted)
 - `~/.claude/` deleted

@@ -15,11 +15,11 @@ The dashboard is not a hand-maintained document. It is a deterministic view comp
 ## Source
 
 ```
-sisko/outposts/
+ADAMA/outposts/
 ├── _aporium-state.md    →  symlink → ../workspace/_aporium/_aporium-state.md
 ├── _basicly-state.md    →  symlink → ../workspace/basicly/_basicly-state.md
 ├── _jamboree-state.md   →  symlink → ...
-├── _sisko-state.md      →  symlink → ../workspace/sisko/_sisko-state.md
+├── _ADAMA-state.md      →  symlink → ../workspace/ADAMA/_ADAMA-state.md
 └── ...
 ```
 
@@ -95,7 +95,7 @@ Control Plane Health
 Verify outpost count matches workspace dir count:
 ```bash
 diff <(ls outposts/*.md | xargs -n1 basename -s .md | sort) \
-     <(ls -d ../*/ | grep -v sisko | xargs -n1 basename | sort)
+     <(ls -d ../*/ | grep -v ADAMA | xargs -n1 basename | sort)
 ```
 
 Verify all symlinks resolve:

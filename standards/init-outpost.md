@@ -9,17 +9,17 @@ timestamp: 2026-06-28
 Copy this block into any outpost repo. The agent will create a state file for the control plane and report where the system falls short.
 
 ```
-You are initializing this repo as a sisko outpost.
+You are initializing this repo as a ADAMA outpost.
 
 ## Concept
 
-sisko is a Markdown-based control plane in `workspace/sisko/`. Every outpost (this repo) carries a single state file — `<slug>-state.md` — with YAML frontmatter and a markdown body. sisko's dashboard reads these files to track status, compliance, and blockers across all outposts. The state file is the outpost's interface to the control plane.
+ADAMA is a Markdown-based control plane in `workspace/ADAMA/`. Every outpost (this repo) carries a single state file — `<slug>-state.md` — with YAML frontmatter and a markdown body. ADAMA's dashboard reads these files to track status, compliance, and blockers across all outposts. The state file is the outpost's interface to the control plane.
 
 You are acting on behalf of this outpost. Your job: create the state file, fill in everything you can, and tell us where the system falls short for this specific repo.
 
 ## Rules
-- Do NOT read any sisko files. This prompt is all the context you need.
-- Do NOT set `state`, `condition`, `priority`, or `criticality`. sisko assigns those.
+- Do NOT read any ADAMA files. This prompt is all the context you need.
+- Do NOT set `state`, `condition`, `priority`, or `criticality`. ADAMA assigns those.
 - Fill in what you can. Mark what you can't.
 - Be honest about gaps. The template is a draft — your feedback improves it.
 
@@ -102,7 +102,7 @@ Exactly 3 items. No more, no less. Prioritize gaps found below.
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| <today> | Initialized as sisko outpost | Created state file during outpost initialization |
+| <today> | Initialized as ADAMA outpost | Created state file during outpost initialization |
 
 ## Compliance Gaps
 
@@ -132,7 +132,7 @@ Frontmatter fields you should be able to determine from exploration:
 - tags
 
 Frontmatter fields you CANNOT determine — leave as-is or mark unknown:
-- criticality, owner (these come from sisko)
+- criticality, owner (these come from ADAMA)
 - depends_on, depended_on_by (cross-outpost knowledge)
 
 Body sections:

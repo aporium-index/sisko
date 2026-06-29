@@ -6,7 +6,7 @@ timestamp: 2026-06-28
 
 # Standard: OKF Frontmatter Convention
 
-<!-- Context: sisko/standards | Priority: high | Version: 1.0 | Updated: 2026-06-28 -->
+<!-- Context: ADAMA/standards | Priority: high | Version: 1.0 | Updated: 2026-06-28 -->
 
 **Purpose**: Adopt the Open Knowledge Format (OKF) frontmatter convention for all Markdown files in the workspace. Makes content portable and agent-readable.
 
@@ -42,7 +42,7 @@ project: project-slug        # which project this belongs to
 ```
 
 ## Implementation
-- Apply to all new files in sisko.
+- Apply to all new files in ADAMA.
 - Retrofit existing Aporium wiki pages (they already use similar YAML frontmatter — align field names).
 - Other projects: apply to `AGENTS.md`, `PROJECT.md`, and any docs/ files.
 

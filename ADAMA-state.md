@@ -1,6 +1,6 @@
 ---
-slug: sisko
-name: sisko
+slug: ADAMA
+name: ADAMA
 category: control-plane
 domain: meta
 sensitivity: internal
@@ -26,21 +26,21 @@ timestamp: 2026-06-28
 stale_threshold_days: 7
 depends_on: []
 depended_on_by: [_aporium, basicly, jamboree, quotaz, prosodymaker, mac-optimization-audit, ml-feedback-program]
-tags: [sisko, control-plane, meta]
+tags: [ADAMA, control-plane, meta]
 file_version: "1.0"
 ---
 
-# sisko
+# ADAMA
 
-Control plane for the workspace. Single source of truth for outpost status, priorities, standards, and cross-outpost coordination. sisko oversees — outposts execute.
+Control plane for the workspace. Single source of truth for outpost status, priorities, standards, and cross-outpost coordination. ADAMA oversees — outposts execute.
 
 ## Location
 
-`workspace/sisko/`
+`workspace/ADAMA/`
 
 ## Current Focus
 
-Architecture consolidation: symlink-based outpost tracking, derived dashboard, state file standard. obsidian-skills installed. OKF frontmatter applied to all sisko files.
+Architecture consolidation: symlink-based outpost tracking, derived dashboard, state file standard. obsidian-skills installed. OKF frontmatter applied to all ADAMA files.
 
 ## Next Actions
 
@@ -55,7 +55,7 @@ None.
 ## Open Decisions
 
 - Dashboard as webview UI? (long-term — markdown for now)
-- Should sisko track opencode configuration as a dependency or outpost?
+- Should ADAMA track opencode configuration as a dependency or outpost?
 
 ## Decisions
 
@@ -63,12 +63,12 @@ None.
 |------|----------|-----------|
 | 2026-06-28 | projects/ → outposts/ | Distinct term avoids collision with generic project vocabulary |
 | 2026-06-28 | State files replace PROJECT.md | Single file per outpost. Dashboard derived from frontmatter. |
-| 2026-06-28 | Symlinks in outposts/ | No duplication. Outpost owns its state file. sisko points to it. |
-| 2026-06-28 | No sessions/ directory | OpenCode logs sessions. sisko doesn't duplicate. |
+| 2026-06-28 | Symlinks in outposts/ | No duplication. Outpost owns its state file. ADAMA points to it. |
+| 2026-06-28 | No sessions/ directory | OpenCode logs sessions. ADAMA doesn't duplicate. |
 
 ## Notes
 
-sisko is tier-0 infrastructure. If sisko is down, agents lose their bearings. Keep it minimal: no databases, no APIs, no build steps.
+ADAMA is tier-0 infrastructure. If ADAMA is down, agents lose their bearings. Keep it minimal: no databases, no APIs, no build steps.
 
 ## Links
 

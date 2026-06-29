@@ -1,1 +1,0 @@
-../../sisko/sisko-state.md

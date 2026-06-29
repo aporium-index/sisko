@@ -12,8 +12,8 @@ timestamp: 2026-06-28
 
 | Outpost | State | Condition | Priority | Tier | Last Active | Focus |
 |---|---|---|---|---|---|---|
-| [[outposts/sisko-state\|sisko]] | operational | condition-green | P1 | tier-0 | 2026-06-28 | Architecture consolidation: symlink-based tracking, derived dashboard |
-| [[outposts/_aporium-state\|Aporium]] | operational | condition-green | P1 | tier-1 | 2026-06-28 | sisko bootstrap — defining control plane standards |
+| [[outposts/ADAMA-state\|ADAMA]] | operational | condition-green | P1 | tier-0 | 2026-06-28 | Architecture consolidation: symlink-based tracking, derived dashboard |
+| [[outposts/_aporium-state\|Aporium]] | operational | condition-green | P1 | tier-1 | 2026-06-28 | ADAMA bootstrap — defining control plane standards |
 | [[outposts/basicly-state\|basicly]] | operational | condition-green | P2 | tier-2 | 2026-06-28 | Transitioning from spike to implementation |
 | [[outposts/jamboree-state\|jamboree]] | operational | condition-green | P2 | tier-2 | 2026-06-28 | Local audio pipeline integration |
 | [[outposts/quotaz-state\|quotaz]] | operational | condition-green | P3 | tier-2 | 2026-06-28 | Pipeline automation active |
@@ -41,7 +41,7 @@ timestamp: 2026-06-28
 
 | Outpost | AGENTS.md | .gitignore |
 |---|---|---|
-| sisko | ✓ | ✓ |
+| ADAMA | ✓ | ✓ |
 | Aporium | ✓ | ✓ |
 | basicly | ✓ | ✗ |
 | jamboree | ✗ | ✓ |
@@ -53,7 +53,7 @@ timestamp: 2026-06-28
 ## Recent Activity
 
 Outposts active in past 7 days:
-- **sisko**, **Aporium**, **basicly**, **jamboree**, **quotaz**, **prosodymaker** — 2026-06-28
+- **ADAMA**, **Aporium**, **basicly**, **jamboree**, **quotaz**, **prosodymaker** — 2026-06-28
 - **ml-feedback-program** — 2026-06-26
 - **mac-optimization-audit** — 2026-06-20
 

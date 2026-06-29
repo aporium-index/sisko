@@ -19,7 +19,7 @@ git push
 
 - If work is incomplete, prefix commit message with `WIP:`.
 - If nothing changed, no commit needed — but verify before moving on.
-- sisko considers `last_active` stale if there's no push within `stale_threshold_days`. No push means the outpost appears dormant even if work happened locally.
+- ADAMA considers `last_active` stale if there's no push within `stale_threshold_days`. No push means the outpost appears dormant even if work happened locally.
 
 ## Branch Policy
 - **Single branch default**: `main` (or `master` if outpost prefers).

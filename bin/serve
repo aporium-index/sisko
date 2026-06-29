@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Serve the sisko dashboard. Opens browser automatically.
+"""Serve the ADAMA dashboard. Opens browser automatically.
 
 Usage:
   ./bin/serve            # serve on port 8080, open browser
@@ -32,6 +32,6 @@ port = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
 os.chdir(SISKO_ROOT)
 server = HTTPServer(('localhost', port), Handler)
 url = f'http://localhost:{port}'
-print(f'sisko dashboard -> {url}')
+print(f'ADAMA dashboard -> {url}')
 webbrowser.open(url)
 server.serve_forever()

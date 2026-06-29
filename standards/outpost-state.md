@@ -6,7 +6,7 @@ timestamp: 2026-06-28
 
 # Standard: Outpost State File
 
-Every repo in the workspace carries a single status file: `_<slug>-state.md`. No other status files. No PROJECT.md. No README-as-status. This file is the outpost's interface to sisko.
+Every repo in the workspace carries a single status file: `_<slug>-state.md`. No other status files. No PROJECT.md. No README-as-status. This file is the outpost's interface to ADAMA.
 
 Sisko's `outposts/` directory contains symlinks pointing to each repo's state file. The dashboard is derived from these symlinks — never hand-maintained.
 
@@ -17,10 +17,10 @@ Sisko's `outposts/` directory contains symlinks pointing to each repo's state fi
 | Identity, description, location | Human or commissioning agent | Once, at setup |
 | Stack, repo, standards compliance | Agent (repo-level) | At setup, then on change |
 | Current focus, next actions, decisions | Agent or human | After every working session |
-| State, condition, priority, criticality, owner | **sisko** (or human) | During check-in only |
+| State, condition, priority, criticality, owner | **ADAMA** (or human) | During check-in only |
 | Last active, last checkin, timestamp | Automated (agent or tooling) | On every write |
 
-Repo-level agents do NOT set `state`, `condition`, or `priority`. They report issues in `## Blockers`. sisko assigns condition during check-in.
+Repo-level agents do NOT set `state`, `condition`, or `priority`. They report issues in `## Blockers`. ADAMA assigns condition during check-in.
 
 ## File Naming
 
@@ -33,7 +33,7 @@ Lowercase. Underscore prefix matches repo directory convention (`_aporium/`). `-
 Examples:
 - `_aporium-state.md`
 - `_basicly-state.md`
-- `_sisko-state.md`
+- `_ADAMA-state.md`
 
 ## Template
 
@@ -62,15 +62,15 @@ default_branch: main
 has_agents_md: true
 has_gitignore: true
 
-# ── Lifecycle (sisko-written during check-in) ──
+# ── Lifecycle (ADAMA-written during check-in) ──
 state: operational
 condition: condition-green
 
-# ── Priority (sisko-written during check-in) ──
+# ── Priority (ADAMA-written during check-in) ──
 priority: P1
 criticality: tier-1
 
-# ── Ownership (sisko-written) ──
+# ── Ownership (ADAMA-written) ──
 owner: josh
 owner_type: human
 
@@ -80,7 +80,7 @@ last_checkin: 2026-06-28
 timestamp: 2026-06-28
 stale_threshold_days: 14
 
-# ── Dependencies (sisko-written) ──
+# ── Dependencies (ADAMA-written) ──
 depends_on: []
 depended_on_by: []
 
@@ -129,7 +129,7 @@ None.
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 2026-06-28 | Bare git repo for dev-state | iCloud sync conflicts with full git repos |
-| 2026-06-28 | sisko as control plane name | Distinctive, won't collide with project naming |
+| 2026-06-28 | ADAMA as control plane name | Distinctive, won't collide with project naming |
 
 ## Notes
 
@@ -180,20 +180,20 @@ Wikilinks in this file resolve within Aporium's vault context.
 ### Lifecycle
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
-| `state` | yes | enum | sisko |
-| `condition` | yes | enum | sisko |
+| `state` | yes | enum | ADAMA |
+| `condition` | yes | enum | ADAMA |
 
 ### Priority
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
-| `priority` | yes | enum | sisko |
-| `criticality` | yes | enum | sisko |
+| `priority` | yes | enum | ADAMA |
+| `criticality` | yes | enum | ADAMA |
 
 ### Ownership
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
-| `owner` | yes | string | sisko |
-| `owner_type` | yes | enum | sisko |
+| `owner` | yes | string | ADAMA |
+| `owner_type` | yes | enum | ADAMA |
 
 ### Temporal
 | Field | Required | Type | Set by |
@@ -201,13 +201,13 @@ Wikilinks in this file resolve within Aporium's vault context.
 | `last_active` | yes | date | Automated |
 | `last_checkin` | yes | date | Automated |
 | `timestamp` | yes | date | Automated |
-| `stale_threshold_days` | no | int | sisko |
+| `stale_threshold_days` | no | int | ADAMA |
 
 ### Dependencies
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
-| `depends_on` | no | list | sisko |
-| `depended_on_by` | no | list | sisko |
+| `depends_on` | no | list | ADAMA |
+| `depended_on_by` | no | list | ADAMA |
 
 ### Meta
 | Field | Required | Type | Set by |
@@ -226,7 +226,7 @@ Wikilinks in this file resolve within Aporium's vault context.
 `P1` (now) | `P2` (soon) | `P3` (later) | `P4` (parked)
 
 ### criticality
-`tier-0` (workspace infra: sisko) | `tier-1` (core product) | `tier-2` (supporting) | `tier-3` (experiment)
+`tier-0` (workspace infra: ADAMA) | `tier-1` (core product) | `tier-2` (supporting) | `tier-3` (experiment)
 
 ### category
 `application` | `library` | `tool` | `infrastructure` | `knowledge-base` | `audit` | `brand` | `experiment` | `control-plane`
@@ -248,7 +248,7 @@ Use lowercase GitHub-style handles for humans, agent names for agents.
 
 ## Condition Determination
 
-During check-in, sisko evaluates:
+During check-in, ADAMA evaluates:
 
 | If | Then condition |
 |----|---------------|

@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-"""Double-click to launch the sisko dashboard. No terminal needed."""
+"""Double-click to launch the ADAMA dashboard. No terminal needed."""
 
 import os, sys, subprocess, time, posixpath, urllib.parse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 try:
     SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-    SISKO_ROOT = SCRIPT_DIR  # this file lives in sisko root, not bin/
+    SISKO_ROOT = SCRIPT_DIR  # this file lives in ADAMA root, not bin/
     WORKSPACE_ROOT = os.path.dirname(SISKO_ROOT)
     PORT = 8080
 
@@ -40,7 +40,7 @@ try:
 
     server = HTTPServer(('localhost', PORT), Handler)
     subprocess.Popen(['open', f'http://localhost:{PORT}'])
-    print(f'\n  sisko dashboard  ->  http://localhost:{PORT}\n')
+    print(f'\n  ADAMA dashboard  ->  http://localhost:{PORT}\n')
     print('  Close this window to stop the server.\n')
     sys.stdout.flush()
     server.serve_forever()
