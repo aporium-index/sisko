@@ -10,6 +10,14 @@ Chronological change log for the workspace. Newest at top.
 
 ## 2026-06-28
 
+### ADAMA — Init process improvements (from jamboree review)
+- Reviewed jamboree state file (first outpost to run init) — all claims verified accurate
+- **standards/init-outpost.md** strengthened: audit checklist now checks .gitignore *contents* (not just existence); state file OKF frontmatter validation added (`type: project`); `## Template Feedback` added to body section list; top-3 marking convention formalized (`**Top N:**` prefix); commit step now uses `git add -A` (was only adding state file)
+- **standards/outpost-state.md** updated: `type: project` added to template frontmatter and field reference; `## Template Feedback` added to body section reference table and template example
+- **ADAMA-state.md** — `type: project` added to frontmatter for OKF compliance
+- Connected previous opencode sisko chats to ADAMA: updated project.worktree + 6 session.directory paths in opencode.db from `/sisko` to `/ADAMA`
+- 3 new top backlog items: add `type: project` to template, resolve OKF/lifecycle `status` collision, strengthen init audit checklist
+
 ### ADAMA — Standards self-audit & reconciliation
 - **.gitignore** brought up to git.md minimum (added `node_modules/`, `.venv/`, `__pycache__/`)
 - **ADAMA-state.md** rewritten: `languages: [python]`, location/notes precise, all 9 body sections refreshed from audit findings, `## Template Feedback` section added (7 items)

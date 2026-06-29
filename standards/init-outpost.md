@@ -42,14 +42,16 @@ Read these to understand what's expected:
 | Standard | Check | Source |
 |----------|-------|--------|
 | AGENTS.md exists | `ls AGENTS.md` | standards/agents.md §1 |
-| .gitignore covers minimum | `.DS_Store`, `node_modules/`, `.venv/`, `__pycache__/`, `.tmp/` | standards/git.md § Repo Structure |
+| .gitignore exists AND covers minimum | File exists AND contains `.DS_Store`, `node_modules/`, `.venv/`, `__pycache__/`, `.tmp/` | standards/git.md § Repo Structure |
 | Single default branch | `git branch` — only main or master, no stale branches | standards/git.md § Branch Policy |
 | Recent push | Pushed within stale_threshold_days | standards/git.md § Always Commit + Push |
-| OKF frontmatter valid | `---` fences, all required YAML fields present | standards/okf.md, standards/outpost-state.md § Field Reference |
-| State file body sections | All 9 body sections present | standards/outpost-state.md § Body Section Reference |
+| State file OKF frontmatter valid | State file starts with `---`, has `type: project`, `tags`, `timestamp` | standards/okf.md, standards/outpost-state.md § Field Reference |
+| State file body sections present | All 10 body sections present (including `## Template Feedback`) | standards/outpost-state.md § Body Section Reference |
 | has_agents_md accurate | Matches reality | State file frontmatter |
 | has_gitignore accurate | Matches reality | State file frontmatter |
 | last_active current | Within stale_threshold_days | State file frontmatter |
+
+**Note:** `has_gitignore: true` means the file exists — it does NOT mean the .gitignore meets the git.md minimum. Check contents separately. If the file exists but is missing required entries, `has_gitignore` stays `true` and the gap goes in `## Compliance Gaps`.
 
 For each gap: cite the specific standard and describe the fix. Collect every next action — top 3 go in the state file, rest in `## Full Backlog`.
 
@@ -58,6 +60,7 @@ For each gap: cite the specific standard and describe the fix. Collect every nex
 The state file already exists. Update it:
 
 **YAML frontmatter to verify/correct:**
+- `type: project` — OKF requirement, first field after `---` fence
 - slug, name, category, domain — identity
 - description — move any existing body description here
 - location — path on disk
@@ -77,7 +80,7 @@ The state file already exists. Update it:
 **Body sections to update:**
 
 - `## Current Focus` — what's being worked on now. One sentence based on git log and dirty files.
-- `## Full Backlog` — all next actions in priority order. Top 3 are the immediate focus.
+- `## Full Backlog` — all next actions in priority order. Mark the **top 3** with a bold label prefix (e.g., `**Top 1:**`, `**Top 2:**`, `**Top 3:**`) so the immediate focus is unambiguous. Remaining items follow as plain checkboxes.
 - `## Blockers` — anything preventing progress. "None." if empty.
 - `## Compliance Gaps` — each gap cites the specific standard and fix.
 - `## Long-Term Direction` — phases, milestones, 6-12 month vision, thresholds that would change phase or priority.
@@ -85,6 +88,7 @@ The state file already exists. Update it:
 - `## Decisions` — reverse-chronological decision log. Date, decision, rationale. This is the project's institutional memory.
 - `## Repo Notes` — gotchas, surprises, unusual conventions for future agents.
 - `## Links` — wikilinks to related files, home pages, external docs.
+- `## Template Feedback` — where the state file template falls short for THIS repo. This is the most important output — it's how ADAMA improves.
 
 ## Step 5 — Template Feedback
 
@@ -95,12 +99,12 @@ Write your feedback at the bottom of the state file under `## Template Feedback`
 ## Step 6 — Git Commit + Push
 
 ```
-git add <slug>-state.md
+git add -A
 git commit -m "maintenance: ADAMA init review — audit, update state, flag gaps"
 git push
 ```
 
-If no remote: note in Compliance Gaps.
+Commit all changes from the audit — state file updates, .gitignore fixes, AGENTS.md creation, any cleanup. If no remote: note in Compliance Gaps.
 
 ## Step 7 — Report
 

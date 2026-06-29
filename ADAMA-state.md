@@ -1,4 +1,5 @@
 ---
+type: project
 slug: ADAMA
 name: ADAMA
 category: control-plane
@@ -41,14 +42,14 @@ file_version: "1.1"
 
 ## Current Focus
 
-Standards reconciliation landed: dashboard-derivation.md migrated to phase model, agents.md Top-Three rule aligned with template, hot.md caught up. Next: backlog items below.
+Jamboree init review surfaced high-impact template gaps: OKF `type: project` missing from state template, `status` field collides between OKF and lifecycle, `## Template Feedback` not in body-section reference. Improving init-outpost.md before rolling to other outposts.
 
 ## Full Backlog
 
-- [x] **Fix .gitignore to meet git.md minimum** — added `node_modules/`, `.venv/`, `__pycache__/`
-- [x] **Reconcile standards/dashboard-derivation.md with phase model** — column mappings, sorting, aggregations, shell snippets, output template all use `phase`/`status`/`condition`; stale symlink examples fixed
-- [x] **Reconcile standards/agents.md § Three Next Actions Rule with template** — renamed to Top-Three Backlog Rule, references `## Full Backlog`
-- [x] Append hot.md entry for phase model overhaul + audit
+- [ ] **Add `type: project` + `## Template Feedback` to outpost-state.md template** — jamboree agent added `type: project` to its frontmatter for OKF compliance, but the template doesn't include it. `## Template Feedback` is required by the init prompt but absent from the body-section reference. Fix both in outpost-state.md.
+- [ ] **Resolve `status` field collision between OKF and lifecycle** — OKF (okf.md) uses `status: active|draft|archived` for publication state; outpost-state.md uses `status: dormant|decommissioned|destroyed` for lifecycle. Same field name, incompatible enums. Rename one (e.g., OKF → `publication_status`, or lifecycle → `lifecycle_status`).
+- [ ] **Strengthen init-outpost.md audit checklist** — add .gitignore *content* check (not just existence), add OKF frontmatter validation for the state file itself, formalize how to mark top-3 in `## Full Backlog`, add standards self-consistency note.
+- [x] Append hot.md entry for phase model overhaul + this audit
 - [ ] Rename legacy `SISKO_ROOT` variable in bin/serve to ADAMA-named equivalent
 - [ ] Dashboard as persistent background service (launchd) — currently manual start via Serve Dashboard.command
 - [ ] AGENTS.md rollout for jamboree, quotaz, mac-optimization-audit, ml-feedback-program (see dashboard.md compliance table)
@@ -86,6 +87,8 @@ Threshold: when all non-dormant outposts reach `outpost` phase with `condition-g
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-06-28 | Reviewed jamboree init — first outpost run | All claims verified accurate (23 tools, 15 docs, 11 submodules, 2 prunable worktrees); surfaced 3 high-impact template gaps now in backlog |
+| 2026-06-28 | Connected sisko opencode chats to ADAMA | Updated project.worktree + 6 session.directory paths in opencode.db from /sisko to /ADAMA; project_directory was already migrated |
 | 2026-06-28 | Standards reconciled with phase model | dashboard-derivation.md and agents.md were drifting from outpost-state.md after the phase-model overhaul; closed three contradictions in one pass |
 | 2026-06-28 | Self-audit landed three standards fixes | ADAMA must conform to its own standards before enforcing them on outposts |
 | 2026-06-28 | sisko → ADAMA | sisko looked like "sicko" |

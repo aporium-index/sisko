@@ -61,6 +61,9 @@ Condition is null when status is terminal (dormant/decommissioned/destroyed).
 
 ```markdown
 ---
+# ── OKF ──
+type: project
+
 # ── Identity ──
 slug: _aporium
 name: Aporium
@@ -172,6 +175,12 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 - AGENTS.md
 - [[Aporium Wiki|wiki/index.md]]
 - [[Aporium Hot|wiki/hot.md]]
+
+## Template Feedback
+
+- OKF `status` field collides with lifecycle `status` — consider renaming one.
+- `primary_framework: none` is awkward for repos with no framework.
+- `domain` is a free string — consider a small enum for dashboard grouping.
 ```
 
 ## Field Reference
@@ -179,6 +188,7 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 ### Identity
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
+| `type` | yes | enum (`project`) | Outpost — OKF requirement, first field |
 | `slug` | yes | string | Outpost |
 | `name` | yes | string | Outpost |
 | `category` | yes | enum | Outpost |
@@ -255,7 +265,7 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 |---------|----------|---------|
 | `# {{ name }}` | yes | Title |
 | `## Current Focus` | yes | What's being worked on. One sentence |
-| `## Full Backlog` | yes | All next actions, prioritized |
+| `## Full Backlog` | yes | All next actions, prioritized. Top 3 marked with bold label prefix |
 | `## Blockers` | yes | What's stopped and why. "None." if empty |
 | `## Compliance Gaps` | yes | Standards violations with fixes. "None." if clean |
 | `## Long-Term Direction` | yes | Phases, milestones, 6-12 month vision, thresholds |
@@ -263,6 +273,7 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 | `## Decisions` | yes | Reverse-chronological decision log |
 | `## Repo Notes` | yes | Gotchas, surprises for future agents |
 | `## Links` | no | Wikilinks to related files |
+| `## Template Feedback` | yes (on init/review) | Where the template falls short for this outpost. How ADAMA improves |
 
 ## Enums
 
