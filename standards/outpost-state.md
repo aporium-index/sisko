@@ -300,6 +300,105 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 | `depends_on` | no | list | ADAMA |
 | `depended_on_by` | no | list | ADAMA |
 
+## Schema Migration
+
+**Authoritative version:** `"1.4"`. The `file_version` field in the state file template reflects this version. All init-outpost prompts, dashboard derivation, and standard checkers reference this version.
+
+### Version Bump Triggers
+
+ADAMA bumps the schema version when:
+- A new required field is added to the template
+- An existing field is renamed or its type/semantics change
+- A new required body section is added
+- An enum value is added to a required enum
+
+Minor editorial clarifications (rewording field descriptions, adding optional fields, updating examples) do not trigger a version bump.
+
+### Migration Procedure
+
+When an agent encounters a state file with an older `file_version`:
+
+1. Do **not** rewrite the state file from scratch.
+2. Apply the cumulative diff from the current version to the latest, in order.
+3. After migration, set `file_version` to `"1.4"`.
+4. Log the migration in `hot.md` if migrating in ADAMA context.
+5. If a field already exists at the newer version (e.g., outpost adopted a v1.4 field before the version bump), do not duplicate it — just bump `file_version`.
+
+### Version Diffs
+
+#### 1.1 → 1.2
+
+```
+# New fields (add with null/empty defaults if unknown):
+runtimes: []
+local_models: []          # was named "models" in v1.1
+repo_layout: standard
+submodule_count: 0
+test_command: null
+ci: false
+hardware_requirements: null
+last_code_activity: null  # fall back to last_active if unknown
+
+# Changed:
+platform: [macos]         # was scalar, now list of enum
+has_agents_md:            # now means compliant, not just exists — re-audit
+has_gitignore:            # now means compliant, not just exists — re-audit
+
+# Convention:
+primary_framework:        # omit if none (was "none")
+```
+
+#### 1.2 → 1.3
+
+```
+# Renamed:
+local_models: []          # was "models" — rename field, keep values
+
+# New fields:
+interfaces: []            # split from platform (user-facing: cli/web/tui/api/gui)
+stack_categories: {}      # optional map when frameworks flattening is lossy
+maturity: null            # prototype | pre-release | stable
+last_push: null           # falls back to last_active if unknown
+
+# Changed:
+platform: [macos]         # now OS/portability only (macos/linux/cross-platform/cloud)
+                          # user-facing values moved to interfaces
+
+# New body section:
+## Health Risks           # degradations that don't stop work
+```
+
+#### 1.3 → 1.4
+
+```
+# New fields:
+evidence_as_of: null      # date when measurements captured (audit/research outposts)
+verification_scope: null  # what verification covers and doesn't
+
+# New interfaces enum value:
+documentation             # added to interfaces enum
+
+# Dormant outpost body section change:
+## Reactivation Checklist  # replaces ## Full Backlog when status: dormant
+                          # no minimum item count, top-three rule does not apply
+
+# Clarified (no field changes):
+# freshness semantics: last_active (liveness), last_code_activity (product velocity),
+#   last_push (remote sync) are distinct — dashboard must not conflate them
+```
+
+### Agent Checklist
+
+When migrating an outpost state file:
+
+1. Note the current `file_version` in the state file.
+2. Apply each version diff in order from current → latest.
+3. For renamed fields: rename the key, preserve the value.
+4. For new required fields: use `null`, `[]`, `{}`, or `false` as appropriate.
+5. Re-audit `has_agents_md` and `has_gitignore` under the "compliant, not just exists" convention.
+6. Bump `file_version` to `"1.4"`.
+7. For dormant outposts (`status: dormant`): replace `## Full Backlog` with `## Reactivation Checklist`.
+
 ## Body Section Reference
 
 | Section | Required | Purpose |

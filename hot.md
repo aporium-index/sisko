@@ -17,10 +17,20 @@ Chronological change log for the workspace. Newest at top.
 - Compliance score corrected: 11/16 → 5/16
 - Dormant rows now show `—` for Phase (was conflating `phase` with `status`)
 
-### ADAMA — agents.md strengthened: end-of-message rule
-- Changed "1-3" to mandatory "exactly 3" concrete next actions
-- Rule now applies to reviews, feedback, and status checks — not just sessions
-- Fallback to `## Open Decisions` when backlog is fully complete
+### ADAMA — agents.md end-of-message rule reverted to original scope
+- The "end every message with suggestions" rule applies to ADAMA-scoped tasks only (state reviews, check-ins, dashboard work), not every coding conversation. Original "1-3" language restored.
+
+### ADAMA — Schema migration rule added to outpost-state.md
+- New `## Schema Migration` section declares authoritative `file_version: "1.4"`
+- Version bump triggers defined: new required fields, renamed fields, new body sections, enum additions
+- Cumulative diffs for 1.1→1.2, 1.2→1.3, 1.3→1.4
+- Migration procedure: apply diffs in order, re-audit compliance booleans, bump version
+- Agent checklist for migrating outpost state files
+
+### ProsodyMaker — Stale `eager-metatarsal` branch + worktree pruned
+- Branch was fully merged into `main` with zero unique commits
+- Worktree path pointed to pre-rename `Code Projects` location (stale)
+- State file updated: compliance gap resolved, backlog item marked done, `file_version` bumped to 1.4
 
 ## 2026-06-28
 
