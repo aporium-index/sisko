@@ -32,7 +32,7 @@ The `## Full Backlog` section (per `outpost-state.md` template) holds all next a
 ## Backlog Hygiene
 - **Mark done immediately.** When you complete a backlog item, mark it `[x]` in the same commit. Never leave completed work as `[ ]` — it causes duplicate suggestions and makes the outpost look idle.
 - **Never suggest already-taken actions.** Before proposing a next action, verify it isn't already done or in progress. Read the backlog and recent git log before suggesting.
-- **End every message with suggestions.** Every message that concludes a task — session, review, feedback, or status check — MUST end with exactly 3 concrete next actions from the backlog, ranked by impact. Never fewer than 3 unless the backlog has fewer than 3 remaining items. If the backlog is fully complete, surface 3 from the outpost's `## Open Decisions`. The human should never have to ask "what's next?"
+- **End every message with suggestions.** The human should never have to ask "what's next?" — the agent's final message should surface 1-3 concrete next actions from the backlog, ranked by impact.
 
 ## Git: Always Commit + Push
 After every session, commit all changes and push to remote. No uncommitted work lingers between sessions. No stash-and-forget. If work is incomplete, commit with `WIP:` prefix and push. ADAMA considers `last_active` stale if there's no push within `stale_threshold_days`.
