@@ -9,17 +9,40 @@ Usage:
 import os
 import sys
 import webbrowser
+import posixpath
+import urllib.parse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SISKO_ROOT = os.path.dirname(SCRIPT_DIR)
+WORKSPACE_ROOT = os.path.dirname(SISKO_ROOT)
+
+
+class WorkspaceHandler(SimpleHTTPRequestHandler):
+    """Serve sisko files AND resolve outpost symlinks into workspace."""
+
+    def translate_path(self, path):
+        path = path.split('?', 1)[0]
+        path = path.split('#', 1)[0]
+        path = posixpath.normpath(urllib.parse.unquote(path))
+        words = [w for w in path.split('/') if w and w != '..']
+
+        if len(words) >= 2 and words[0] == 'outposts':
+            filename = words[-1]
+            outpost_path = os.path.join(SISKO_ROOT, 'outposts', filename)
+            if os.path.islink(outpost_path):
+                real = os.path.realpath(outpost_path)
+                if real.startswith(WORKSPACE_ROOT):
+                    return real
+
+        return os.path.join(SISKO_ROOT, *words)
+
 
 port = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
-
 os.chdir(SISKO_ROOT)
 
-server = HTTPServer(('localhost', port), SimpleHTTPRequestHandler)
+server = HTTPServer(('localhost', port), WorkspaceHandler)
 url = f'http://localhost:{port}'
-print(f'sisko dashboard → {url}')
+print(f'sisko dashboard -> {url}')
 webbrowser.open(url)
 server.serve_forever()

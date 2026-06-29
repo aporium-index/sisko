@@ -38,18 +38,19 @@
   .blocker { color: #f85149; }
   .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #21262d; color: #484f58; font-size: 12px; }
   .loading { padding: 40px; text-align: center; color: #8b949e; }
+  .error { color: #f85149; padding: 20px; }
 </style>
 </head>
 <body>
 <h1>sisko dashboard</h1>
-<p class="subtitle">Live — reads outpost state files on every load.</p>
+<p class="subtitle">Live &mdash; reads outpost state files on every load.</p>
 
 <div class="stats" id="stats"></div>
 <div class="section-title">All Outposts</div>
 <div id="table-container"><p class="loading">loading outposts&hellip;</p></div>
-<div class="section-title" id="blockers-section" style="display:none">Blockers</div>
+<div class="section-title" id="blockers-title" style="display:none">Blockers</div>
 <div id="blockers"></div>
-<p class="footer">sisko control plane &middot; live view &middot; <code>bin/serve</code></p>
+<p class="footer">sisko control plane &middot; <code>Serve Dashboard.command</code></p>
 
 <script>
 const OUTPOSTS_DIR = 'outposts';
@@ -115,13 +116,30 @@ function conditionHtml(condition, state) {
 
 function staleIndicator(staleDays, threshold) {
   if (staleDays === null) return '';
-  if (staleDays > threshold) return ` <span class="stale" title="Stale: ${staleDays} days">\u26A0</span>`;
+  if (staleDays > threshold) return ' <span class="stale" title="Stale: ' + staleDays + ' days">\u26A0</span>';
   return '';
 }
 
+async function discoverSlugs() {
+  const slugs = [];
+  const resp = await fetch(OUTPOSTS_DIR + '/');
+  if (!resp.ok) return slugs;
+  const html = await resp.text();
+  const re = /href="([^"]+-state\.md)"/g;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const slug = m[1].replace('-state.md', '');
+    slugs.push(slug);
+  }
+  return slugs;
+}
+
 async function loadOutpost(slug) {
-  const resp = await fetch(`${OUTPOSTS_DIR}/${slug}-state.md`);
-  if (!resp.ok) return null;
+  const resp = await fetch(OUTPOSTS_DIR + '/' + slug + '-state.md');
+  if (!resp.ok) {
+    console.warn('failed to load', slug, resp.status);
+    return null;
+  }
   const text = await resp.text();
   const data = parseFrontmatter(text);
   data._slug = slug;
@@ -137,29 +155,41 @@ function extractBlockers(text) {
   const body = parts.slice(2).join('---');
   const m = body.match(/^## Blockers\s*\n((?:\s*[-*]\s+.+\n?)*)/m);
   if (!m) return [];
-  return m[1].split('\n').filter(l => l.trim().startsWith('-') || l.trim().startsWith('*')).map(l => l.replace(/^[-*]\s*/, '').trim());
+  return m[1].split('\n').filter(function(l) {
+    return l.trim().startsWith('-') || l.trim().startsWith('*');
+  }).map(function(l) {
+    return l.replace(/^[-*]\s*/, '').trim();
+  });
 }
 
 async function loadAll() {
-  const slugs = [
-    'sisko', '_aporium', 'basicly', 'jamboree', 'quotaz',
-    'prosodymaker', 'mac-optimization-audit', 'ml-feedback-program'
-  ];
+  var slugs = await discoverSlugs();
 
-  const outposts = [];
-  for (const slug of slugs) {
-    const data = await loadOutpost(slug);
+  if (!slugs.length) {
+    slugs = ['sisko', '_aporium', 'basicly', 'jamboree', 'quotaz',
+             'prosodymaker', 'mac-optimization-audit', 'ml-feedback-program'];
+  }
+
+  var outposts = [];
+  for (var i = 0; i < slugs.length; i++) {
+    var data = await loadOutpost(slugs[i]);
     if (data) outposts.push(data);
   }
 
-  const tierOrder = { 'tier-0': 0, 'tier-1': 1, 'tier-2': 2, 'tier-3': 3 };
-  const priOrder = { P1: 0, P2: 1, P3: 2, P4: 3 };
-  const stateOrder = { operational: 0, transiting: 1, commissioning: 2, dormant: 3, decommissioned: 4, destroyed: 5 };
+  if (!outposts.length) {
+    document.getElementById('table-container').innerHTML =
+      '<p class="error">No outposts loaded. Is <code>Serve Dashboard.command</code> running?</p>';
+    return;
+  }
 
-  outposts.sort((a, b) => {
-    return (tierOrder[a.criticality] ?? 99) - (tierOrder[b.criticality] ?? 99) ||
-           (priOrder[a.priority] ?? 99) - (priOrder[b.priority] ?? 99) ||
-           (stateOrder[a.state] ?? 99) - (stateOrder[b.state] ?? 99) ||
+  var tierOrder = { 'tier-0': 0, 'tier-1': 1, 'tier-2': 2, 'tier-3': 3 };
+  var priOrder = { P1: 0, P2: 1, P3: 2, P4: 3 };
+  var stateOrder = { operational: 0, transiting: 1, commissioning: 2, dormant: 3, decommissioned: 4, destroyed: 5 };
+
+  outposts.sort(function(a, b) {
+    return (tierOrder[a.criticality] || 99) - (tierOrder[b.criticality] || 99) ||
+           (priOrder[a.priority] || 99) - (priOrder[b.priority] || 99) ||
+           (stateOrder[a.state] || 99) - (stateOrder[b.state] || 99) ||
            (a.name || a._slug).localeCompare(b.name || b._slug);
   });
 
@@ -167,20 +197,20 @@ async function loadAll() {
 }
 
 function render(outposts) {
-  let green = 0, yellow = 0, red = 0, adrift = 0;
-  let operational = 0, dormant = 0;
-  let agents = 0, gitignore = 0;
+  var green = 0, yellow = 0, red = 0, adrift = 0;
+  var operational = 0, dormant = 0;
+  var agents = 0, gitignore = 0;
 
-  const rows = outposts.map(o => {
-    const state = o.state || 'unknown';
-    const condition = o.condition;
-    const priority = o.priority || '\u2014';
-    const tier = o.criticality || '\u2014';
-    const lastActive = o.last_active || '\u2014';
-    const threshold = parseInt(o.stale_threshold_days) || 14;
-    const staleHtml = staleIndicator(o._staleDays, threshold);
-    const condHtml = conditionHtml(condition, state);
-    const slug = o._slug;
+  var rows = outposts.map(function(o) {
+    var state = o.state || 'unknown';
+    var condition = o.condition;
+    var priority = o.priority || '\u2014';
+    var tier = o.criticality || '\u2014';
+    var lastActive = o.last_active || '\u2014';
+    var threshold = parseInt(o.stale_threshold_days) || 14;
+    var staleHtml = staleIndicator(o._staleDays, threshold);
+    var condHtml = conditionHtml(condition, state);
+    var slug = o._slug;
 
     if (state === 'operational') operational++;
     if (state === 'dormant') dormant++;
@@ -191,44 +221,54 @@ function render(outposts) {
     if (o.has_agents_md) agents++;
     if (o.has_gitignore) gitignore++;
 
-    return `<tr>
-      <td><a href="outposts/${slug}-state.md">${o.name || slug}</a></td>
-      <td>${STATE_BADGES[state] || state}</td>
-      <td>${condHtml}</td>
-      <td>${priority}</td>
-      <td>${tier}</td>
-      <td>${lastActive}${staleHtml}</td>
-      <td class="focus">${o._focus}</td>
-    </tr>`;
+    return '<tr>' +
+      '<td><a href="' + OUTPOSTS_DIR + '/' + slug + '-state.md">' + (o.name || slug) + '</a></td>' +
+      '<td>' + (STATE_BADGES[state] || state) + '</td>' +
+      '<td>' + condHtml + '</td>' +
+      '<td>' + priority + '</td>' +
+      '<td>' + tier + '</td>' +
+      '<td>' + lastActive + staleHtml + '</td>' +
+      '<td class="focus">' + o._focus + '</td>' +
+      '</tr>';
   }).join('');
 
-  document.getElementById('table-container').innerHTML = `<table>
-    <thead><tr><th>Outpost</th><th>State</th><th>Condition</th><th>Priority</th><th>Tier</th><th>Active</th><th>Focus</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
+  document.getElementById('table-container').innerHTML = '<table>' +
+    '<thead><tr><th>Outpost</th><th>State</th><th>Condition</th><th>Priority</th><th>Tier</th><th>Active</th><th>Focus</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody>' +
+    '</table>';
 
-  const total = outposts.length;
-  const compliance = agents + gitignore;
+  var total = outposts.length;
+  var compliance = agents + gitignore;
 
-  document.getElementById('stats').innerHTML = `
-    <div class="stat"><div class="stat-label">Outposts</div><div class="stat-value">${total}</div></div>
-    <div class="stat"><div class="stat-label">Operational</div><div class="stat-value" style="color:#3fb950">${operational}</div></div>
-    <div class="stat"><div class="stat-label">Dormant</div><div class="stat-value" style="color:#8b949e">${dormant}</div></div>
-    <div class="stat"><div class="stat-label">Compliance</div><div class="stat-value">${compliance}/${total * 2}</div></div>
-    <div class="stat"><div class="stat-label">Green</div><div class="stat-value" style="color:#3fb950">${green}</div></div>
-    <div class="stat"><div class="stat-label">Alerts</div><div class="stat-value" style="color:#d2991d">${yellow}</div></div>
-  `;
+  document.getElementById('stats').innerHTML =
+    '<div class="stat"><div class="stat-label">Outposts</div><div class="stat-value">' + total + '</div></div>' +
+    '<div class="stat"><div class="stat-label">Operational</div><div class="stat-value" style="color:#3fb950">' + operational + '</div></div>' +
+    '<div class="stat"><div class="stat-label">Dormant</div><div class="stat-value" style="color:#8b949e">' + dormant + '</div></div>' +
+    '<div class="stat"><div class="stat-label">Compliance</div><div class="stat-value">' + compliance + '/' + (total * 2) + '</div></div>' +
+    '<div class="stat"><div class="stat-label">Green</div><div class="stat-value" style="color:#3fb950">' + green + '</div></div>' +
+    '<div class="stat"><div class="stat-label">Alerts</div><div class="stat-value" style="color:#d2991d">' + yellow + '</div></div>';
 
-  const blockers = outposts.flatMap(o => o._blockers.map(b => ({ name: o.name || o._slug, blocker: b })));
+  var blockers = [];
+  for (var i = 0; i < outposts.length; i++) {
+    var o = outposts[i];
+    for (var j = 0; j < o._blockers.length; j++) {
+      blockers.push({ name: o.name || o._slug, blocker: o._blockers[j] });
+    }
+  }
   if (blockers.length) {
-    document.getElementById('blockers-section').style.display = '';
-    document.getElementById('blockers').innerHTML = blockers.map(b =>
-      `<p><strong>${b.name}:</strong> ${b.blocker}</p>`
-    ).join('');
+    document.getElementById('blockers-title').style.display = '';
+    var html = '';
+    for (var k = 0; k < blockers.length; k++) {
+      html += '<p><strong>' + blockers[k].name + ':</strong> ' + blockers[k].blocker + '</p>';
+    }
+    document.getElementById('blockers').innerHTML = html;
   }
 }
 
-loadAll();
+loadAll().catch(function(err) {
+  document.getElementById('table-container').innerHTML =
+    '<p class="error">Failed to load: ' + err.message + '</p>';
+});
 </script>
 </body>
 </html>
