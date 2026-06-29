@@ -94,6 +94,11 @@ def days_ago(date_str):
         return None
 
 
+def resolve_symlink(path):
+    """Resolve a symlink to its absolute real path."""
+    return os.path.realpath(path)
+
+
 def load_outposts():
     """Load all outpost state files via symlinks."""
     outposts = []
@@ -104,9 +109,11 @@ def load_outposts():
         if not fname.endswith('.md'):
             continue
         path = os.path.join(OUTPOSTS_DIR, fname)
+        real_path = resolve_symlink(path)
         slug = fname.replace('-state.md', '')
         data = parse_frontmatter(path)
         data['_slug'] = slug
+        data['_real_path'] = real_path
         data['_focus'] = first_body_line(path)
         data['_stale_days'] = days_ago(data.get('last_active'))
         outposts.append(data)
@@ -188,11 +195,13 @@ def generate_html(outposts):
         focus = o.get('_focus', '—')
         threshold = int(o.get('stale_threshold_days', 14))
         stale = stale_indicator(o.get('_stale_days'), threshold)
+        real_path = o.get('_real_path', '')
+        file_url = f'file://{real_path}' if real_path else f'outposts/{slug}-state.md'
 
         condition_html = condition_badge(condition) if state == 'operational' else '—'
 
         rows.append(f'''        <tr>
-          <td><a href="outposts/{slug}-state.md">{name}</a></td>
+          <td><a href="{file_url}">{name}</a></td>
           <td>{state_badge(state)}</td>
           <td>{condition_html}</td>
           <td>{priority}</td>
