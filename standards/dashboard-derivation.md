@@ -42,7 +42,8 @@ Every `.md` file in `outposts/` is a symlink to a real state file in its repo. T
 | Priority | `priority` | Raw value |
 | Tier | `criticality` | Raw value |
 | Last Active | `last_active` | Date, with staleness indicator if threshold exceeded |
-| Last Code | `last_code_activity` | Date of last non-state/non-docs commit. Falls back to `last_active` if absent. |
+| Content Activity | `last_content_activity` | Date of last content commit (e.g. `*.md`). Falls back to `last_active` if absent. |
+| Code Activity | `last_code_activity` | Date of last non-state/non-content commit. Falls back to `last_active` if absent. |
 | Last Push | `last_push` | Date of last successful `git push` to remote. Falls back to `last_active` if absent. |
 | Focus | — | First line of `## Current Focus` body section |
 
@@ -69,17 +70,19 @@ Three temporal fields measure different kinds of freshness. The dashboard must n
 | Field | Measures | Dashboard Use |
 |-------|----------|---------------|
 | `last_active` | Any commit (state file, docs, code) | Liveness — is this outpost touched at all? Staleness indicator uses this. |
-| `last_code_activity` | Last commit touching non-state, non-docs files | Product velocity — is substantive development happening? Falls back to `last_active` if absent. |
+| `last_content_activity` | Last commit touching content files in the outpost's `primary_language` (e.g. `*.md`) | Content velocity — for outposts where Markdown/documents are the primary product. Falls back to `last_active` if absent. |
+| `last_code_activity` | Last commit touching non-state, non-content files | Product velocity — is substantive development happening? Falls back to `last_active` if absent. |
 | `last_push` | Last successful `git push` to remote | Remote sync — is local work visible? Falls back to `last_active` if absent. |
 
-A state-file-only review updates `last_active` but not `last_code_activity`. The dashboard should show `last_code_activity` (or `last_active` fallback) in the "Last Code" column so administrative reviews don't make product development look more recent than it is.
+A state-file-only review updates `last_active` but not `last_content_activity` or `last_code_activity`. The dashboard should show `last_content_activity` (or `last_code_activity` or `last_active` fallback) in the "Content Activity" column so administrative reviews don't make product development look more recent than it is.
 
 ## Control Plane Health (aggregations)
 
 Every field in the health section is derived:
 
 ```
-compliance_score = sum(has_agents_md + has_gitignore) per outpost
+# has_agents_md / has_gitignore: compliant=2, partial=1, missing=0
+compliance_score = sum(compliance_score(has_agents_md) + compliance_score(has_gitignore)) per outpost
 max_compliance   = 2 * outpost_count
 
 # Phase counts (active pipeline)

@@ -42,6 +42,7 @@ workspace/
 - `dashboard.md` is derivable — always verifiable against state file frontmatter.
 - Every outpost must commit + push after every session.
 - No session files. OpenCode logs sessions. ADAMA uses `hot.md` for chronological context.
+- **End every message with 3 next actions.** Never end a response without suggesting 3 concrete next actions from the backlog, ranked by impact. If fewer than 3 exist, add a discovery or verification action.
 
 ## Related
 - `dashboard.md` — derived view of all outpost states

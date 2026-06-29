@@ -10,6 +10,22 @@ Chronological change log for the workspace. Newest at top.
 
 ## 2026-06-29
 
+### ADAMA — v1.5 standards from Aporium template feedback (12 items)
+- **`last_content_activity`** — new temporal field for content-primary outposts (Markdown, docs)
+- **`test_commands`** — replaces single `test_command` string with list of named verification commands (name, command, kind, scope, last_run, result)
+- **`repositories`** — optional map for split-topology outposts (state repo + content worktree + external gitdir)
+- **`health_metrics`** — optional dated evidence map for knowledge-base/audit outposts
+- **`has_agents_md`/`has_gitignore`** → tri-state enum: `compliant | partial | missing` (replaces boolean)
+- **OKF compatibility profiles** — `aporium-v1` and `standard` profiles in standards/okf.md
+- **External-state exception** — iCloud vault outposts may place state file externally; added to standards/agents.md
+- **Review-packet version pinning** — init prompts must pin standards version; agent reports skew before editing
+- **Cross-vault link syntax** — outpost-prefixed wikilinks (`[[aporium:wiki/index.md]]`) resolve in linked vault context
+- **v1.5 migration diff** — 1.4→1.5 diff in standards/outpost-state.md
+- **ADAMA-state.md** — migrated to v1.5, all new fields adopted
+- **standards/agents.md** — "End every message with 3 next actions" strengthened (must be exactly 3, never fewer)
+- **AGENTS.md (root)** — added "End every message with 3 next actions" rule
+- **check-standards** — pending run to verify consistency
+
 ### ADAMA — Dashboard rebuilt from state file frontmatter
 - Fixed compliance table: Aporium (✓✓→✗✗), jamboree (✗✓→✗✗), quotaz (✗✓→✗✗), prosodymaker (✓✓→✗✗), mac-optimization-audit (✗✗→✓✓)
 - Fixed 5 stale `last_active` dates: Aporium, jamboree, quotaz, prosodymaker, mac-optimization-audit

@@ -54,7 +54,19 @@ project: project-slug        # which project this belongs to
 - The key addition is `timestamp` (ISO date, YYYY-MM-DD) for sortability.
 - Aporium's existing `status` field maps to `publication_status`, not outpost lifecycle `status`.
 
+## Compatibility Profiles
+
+Outposts with existing frontmatter taxonomies may define a compatibility profile instead of literal OKF adoption:
+
+| Profile | Applies to | Mapping |
+|---------|-----------|---------|
+| `aporium-v1` | Aporium wiki pages | `type` → uses existing page taxonomy (wider enum); `timestamp` → `last_updated`; `status` → `publication_status` collision avoided via `publication_status` field |
+| `standard` | All ADAMA standards files | Direct OKF — `type` from restricted enum, `tags`, `timestamp` |
+
+To define a new profile, document it in the outpost's `AGENTS.md` and reference it in the state file's `## Template Feedback` section. The profile must specify which OKF fields have native equivalents and which require bridging.
+
 ## Related
 - [[git|Git Conventions]]
 - [[agents|Agent Standards]]
+- [[outpost-state|Outpost State File]]
 - [OKF Spec](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)

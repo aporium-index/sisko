@@ -46,9 +46,9 @@ Read these to understand what's expected:
 | Single default branch | `git branch` — only main or master, no stale branches | standards/git.md § Branch Policy |
 | Recent push | Pushed within stale_threshold_days | standards/git.md § Always Commit + Push |
 | State file OKF frontmatter valid | State file starts with `---`, has `type: project`, `tags`, `timestamp` | standards/okf.md, standards/outpost-state.md § Field Reference |
-| State file body sections present | All 10 body sections present (including `## Template Feedback`) | standards/outpost-state.md § Body Section Reference |
-| has_agents_md accurate | Matches reality — true only if file EXISTS AND is compliant | State file frontmatter |
-| has_gitignore accurate | Matches reality — true only if file EXISTS AND meets git.md minimum | State file frontmatter |
+| State file body sections present | All body sections present (including `## Template Feedback`) | standards/outpost-state.md § Body Section Reference |
+| has_agents_md accurate | Must be `compliant` (file EXISTS AND meets standards), `partial` (exists but gaps), or `missing` | State file frontmatter |
+| has_gitignore accurate | Must be `compliant` (file EXISTS AND meets git.md minimum), `partial` (exists but gaps), or `missing` | State file frontmatter |
 | last_active current | Within stale_threshold_days | State file frontmatter |
 
 For each gap: cite the specific standard and describe the fix. Collect every next action — top 3 go in the state file, rest in `## Full Backlog`. Dormant outposts use `## Reactivation Checklist` instead of `## Full Backlog` (see agents.md § Top-Three Backlog Rule).
@@ -65,13 +65,18 @@ The state file already exists. Update it:
 - primary_language, languages, frameworks, runtimes, local_models, interfaces, platform — from exploration
 - stack_categories — optional; use when `frameworks` flattening is lossy (e.g., `{runtime: [...], test: [...], build: [...]}`)
 - repo_url, repo_type, default_branch, repo_layout, submodule_count — from exploration
-- test_command, ci, hardware_requirements, evidence_as_of, verification_scope — from exploration (null if not applicable)
-- has_agents_md, has_gitignore — set true ONLY if file exists AND meets standards
+- test_commands — list of named verification commands; null if no tests (see outpost-state.md Field Reference for entry schema)
+- ci, hardware_requirements, evidence_as_of, verification_scope — from exploration (null if not applicable)
+- repositories — optional map for split-topology outposts (e.g. separate state repo + content worktree + external gitdir)
+- health_metrics — optional dated evidence map for knowledge-base/audit outposts
+- has_agents_md — set `compliant` (EXISTS AND compliant), `partial` (exists but gaps), or `missing`
+- has_gitignore — set `compliant` (EXISTS AND covers git.md minimum), `partial` (exists but gaps), or `missing`
 - last_active, last_code_activity, last_push, last_checkin, timestamp — set to today
 - tags — 3-5 keywords
-- file_version — set to "1.3"
+- file_version — set to "1.5"
 
 To find `last_code_activity`: `git log --format='%cd' --date=short -- ':!*-state.md' ':!AGENTS.md' ':!*.md' | head -1`
+To find `last_content_activity` (for content-primary outposts): `git log --format='%cd' --date=short -- '*.md' | head -1`
 To find `last_push`: `git log origin/<default_branch> -1 --format='%cd' --date=short`
 
 **YAML fields to NOT touch:**

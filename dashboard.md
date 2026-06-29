@@ -18,7 +18,7 @@ brief ──► survey ──► outpost
 | Phase | Outposts |
 |-------|----------|
 | outpost | ADAMA |
-| survey | Aporium, basicly, jamboree, quotaz, prosodymaker |
+| survey | Aporium, basicly, jamboree, quotaz, neocouth |
 | brief | — |
 | dormant | Mac Optimization Audit, rejoy |
 
@@ -31,7 +31,7 @@ brief ──► survey ──► outpost
 | [[outposts/basicly-state\|basicly]] | survey | — | condition-green | P2 | tier-2 | 2026-06-28 | macOS language assistant — spelling, grammar, vocabulary signals |
 | [[outposts/jamboree-state\|jamboree]] | survey | — | condition-green | P2 | tier-2 | 2026-06-29 | Audio suite — Ableton Live 12, Python, local audio pipeline |
 | [[outposts/quotaz-state\|quotaz]] | survey | — | condition-green | P3 | tier-2 | 2026-06-29 | AI model eval toolkit — compare free-tier models |
-| [[outposts/prosodymaker-state\|prosodymaker]] | survey | — | condition-green | P3 | tier-3 | 2026-06-29 | Chain-of-thought song maker — tracker/logs-based dev |
+| [[outposts/neocouth-state\|neocouth]] | survey | — | condition-green | P3 | tier-3 | 2026-06-29 | Songcraft outpost — multi-modality prompts, agent swarms, catalog, vision engine, wiki |
 | [[outposts/mac-optimization-audit-state\|mac-optimization-audit]] | — | dormant | — | P4 | tier-3 | 2026-06-29 | Mac optimization reference docs |
 | [[outposts/rejoy-state\|rejoy]] | — | dormant | — | P4 | tier-3 | 2026-06-29 | Music, culture, technology, and futures research with applied Suno feedback |
 
@@ -44,7 +44,7 @@ brief ──► survey ──► outpost
 | basicly | ✓ | ✗ |
 | jamboree | ✗ | ✗ |
 | quotaz | ✗ | ✗ |
-| prosodymaker | ✗ | ✗ |
+| neocouth | ✓ | ✓ |
 | mac-optimization-audit | ✓ | ✓ |
 | rejoy | ✓ | ✓ |
 

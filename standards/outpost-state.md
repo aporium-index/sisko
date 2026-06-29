@@ -95,19 +95,28 @@ repo_type: bare
 default_branch: master
 repo_layout: standard
 submodule_count: 0
+repositories: null  # optional map for split-topology outposts; see Field Reference
 
 # ── Verification ──
-test_command: null
+test_commands: null  # list of named verification commands; replaces test_command, see Field Reference
 ci: false
 hardware_requirements: null
 evidence_as_of: null
 verification_scope: null
 
+# ── Health Metrics ──
+# health_metrics: optional dated map for knowledge-base/audit outposts
+#   source_count: 3012
+#   pending_manifests: 215
+#   quote_placeholders: 91
+#   quality_flag_count: 716
+#   report_pointer: wiki/health-report.md
+
 # ── Compliance ──
-# has_agents_md / has_gitignore: true only if file EXISTS AND meets standards.
-# If file exists but is non-compliant, set false and list gap in ## Compliance Gaps.
-has_agents_md: true
-has_gitignore: true
+# has_agents_md / has_gitignore: compliant | partial | missing
+# See Field Reference for threshold definitions.
+has_agents_md: compliant
+has_gitignore: compliant
 
 # ── Lifecycle (ADAMA-written) ──
 phase: survey
@@ -125,7 +134,8 @@ owner_type: human
 
 # ── Temporal ──
 last_active: 2026-06-28
-last_code_activity: 2026-06-28
+last_content_activity: null  # last commit touching content files from the outpost's primary_language; falls back to last_active if absent
+last_code_activity: 2026-06-28  # last commit touching non-state, non-content files
 last_push: 2026-06-28
 last_checkin: 2026-06-28
 timestamp: 2026-06-28
@@ -137,7 +147,7 @@ depended_on_by: []
 
 # ── Meta ──
 tags: [knowledge-base, obsidian, wiki, llm]
-file_version: "1.4"
+file_version: "1.5"
 ---
 
 # {{ name }}
@@ -192,6 +202,7 @@ syntheses, promote to outpost phase with P0 priority for a production release sp
 
 Aporium lives outside `workspace/` due to iCloud constraints.
 Wikilinks resolve within Aporium's vault context, not ADAMA's.
+Cross-vault state files: prefix wikilinks with the target outpost slug if the link target lives in a different vault (e.g. `[[aporium:wiki/index.md]]`). The dashboard must resolve these in the linked vault's root context.
 
 ## Links
 
@@ -202,8 +213,18 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 ## Template Feedback
 
 - ~~OKF `status` field collides with lifecycle `status`~~ — resolved (OKF renamed to `publication_status`)
-- `primary_framework: none` is awkward for repos with no framework — omit the field instead
-- `domain` is a free string — consider a small enum for dashboard grouping
+- ~~`primary_framework: none` is awkward for repos with no framework~~ — resolved (omit the field instead)
+- ~~`domain` is a free string~~ — considered; kept free-string for flexibility, outposts may tag for grouping
+- ~~Markdown-native activity misclassified~~ — resolved (added `last_content_activity` in v1.5)
+- ~~Single `test_command` is too narrow~~ — resolved (replaced with `test_commands` list in v1.5)
+- ~~Compliance booleans hide actionable partial states~~ — resolved (`has_agents_md`/`has_gitignore` now use `compliant | partial | missing` in v1.5)
+- ~~Knowledge-base health needs first-class evidence~~ — resolved (added `health_metrics` in v1.5)
+- ~~One repository record cannot represent split topology~~ — resolved (added `repositories` map in v1.5)
+- ~~State-location rule conflicts with supplied topology~~ — resolved (added external-state exception to standards/agents.md)
+- ~~OKF needs compatibility profiles~~ — resolved (added to standards/okf.md)
+- ~~Review packet version skew~~ — resolved (review packets should pin standards version; agent reports skew before editing)
+- ~~Cross-vault links are ambiguous~~ — resolved (added outpost-prefixed wikilink syntax)
+- Feedback backlog: `domain` enum, state-location symlink verification, dashboard-column naming
 ```
 
 ## Field Reference
@@ -247,22 +268,28 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 | `default_branch` | no | string | Outpost |
 | `repo_layout` | no | enum | Outpost |
 | `submodule_count` | no | int | Outpost — only when `repo_layout: submodule-superproject` |
+| `repositories` | no | map | Outpost — optional; for split-topology outposts (e.g. separate state repo + content worktree + external gitdir). Keys: `state`, `content`, `git_dir`; each with `location`, `repo_url`, `last_push` |
 | `sensitivity` | no | enum | Outpost |
 
 ### Verification
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
-| `test_command` | no | string | Outpost — command to run tests, null if none |
+| `test_commands` | no | list of objects | Outpost — named verification commands. Each entry: `name` (string), `command` (string), `kind` (string: unit\|lint\|integration\|e2e\|manual), `scope` (string), `last_run` (date), `result` (string: pass\|fail\|unknown). Replaces `test_command` |
 | `ci` | no | bool | Outpost — has CI workflow? |
 | `hardware_requirements` | no | string | Outpost — hardware/gates that can't be CI-tested |
 | `evidence_as_of` | no | date | Outpost — date when evidence/measurements were captured. Use for audit/research outposts where findings expire with OS, app, or hardware versions |
 | `verification_scope` | no | string | Outpost — what the verification covers and what it doesn't (e.g., "syntax check only; no runtime validation") |
 
+### Health Metrics
+| Field | Required | Type | Set by |
+|-------|----------|------|--------|
+| `health_metrics` | no | map | Outpost — optional; dated evidence snapshot for knowledge-base/audit outposts. Keys are metric names (e.g. `source_count`, `pending_manifests`, `quote_placeholders`, `quality_flag_count`), values are integers or strings. Use `report_pointer` for a link to the full health report |
+
 ### Compliance
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
-| `has_agents_md` | yes | bool | Outpost — true only if file EXISTS AND meets standards |
-| `has_gitignore` | yes | bool | Outpost — true only if file EXISTS AND meets git.md minimum |
+| `has_agents_md` | yes | enum | Outpost — `compliant` (file EXISTS AND meets standards), `partial` (file exists but has gaps), `missing` (file does not exist) |
+| `has_gitignore` | yes | enum | Outpost — `compliant` (file EXISTS AND meets git.md minimum), `partial` (file exists but has gaps), `missing` (file does not exist) |
 
 ### Lifecycle
 | Field | Required | Type | Set by |
@@ -288,7 +315,8 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
 | `last_active` | yes | date | Automated — any commit |
-| `last_code_activity` | no | date | Automated — last commit touching non-state, non-docs files |
+| `last_content_activity` | no | date | Automated — last commit touching content files in the outpost's `primary_language` (e.g. `*.md`). Falls back to `last_active` if absent. Useful when the primary product is content, not code |
+| `last_code_activity` | no | date | Automated — last commit touching non-state, non-content files |
 | `last_push` | no | date | Automated — last successful `git push` to remote |
 | `last_checkin` | yes | date | Automated |
 | `timestamp` | yes | date | Automated |
@@ -302,7 +330,9 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 
 ## Schema Migration
 
-**Authoritative version:** `"1.4"`. The `file_version` field in the state file template reflects this version. All init-outpost prompts, dashboard derivation, and standard checkers reference this version.
+**Authoritative version:** `"1.5"`. The `file_version` field in the state file template reflects this version. All init-outpost prompts, dashboard derivation, and standard checkers reference this version.
+
+> **Review packet version pinning:** When a review/init prompt targets a specific standards version, the prompt must state `Standards version: "X.Y"` at the start and the agent should compare against that pinned version. At the end of the review, the agent should report version skew (e.g., `"Prompt pinned v1.3 but live template is v1.5 — check schema migration before editing."`) before making any changes.
 
 ### Version Bump Triggers
 
@@ -387,6 +417,31 @@ documentation             # added to interfaces enum
 #   last_push (remote sync) are distinct — dashboard must not conflate them
 ```
 
+#### 1.4 → 1.5
+
+```
+# New fields:
+last_content_activity: null  # last commit touching content files in primary_language; falls back to last_active
+repositories: null           # optional map for split-topology outposts
+health_metrics: null         # optional dated map for knowledge-base/audit outposts
+
+# Changed:
+test_command:                # was a single string, now a list of named verification commands
+                             # -> rename key to test_commands, set to null if no command exists
+has_agents_md:               # was bool (true/false), now enum (compliant/partial/missing)
+                             # -> true  → compliant (file exists AND meets standards)
+                             # -> false → inspect: is file missing entirely (→ missing) or
+                             #    present but non-compliant (→ partial)?
+has_gitignore:               # same as has_agents_md
+
+# New body sections (optional):
+## Health metrics            # optional; knowledge-base/audit outposts may add inline
+                             # health evidence instead of a frontmatter health_metrics map
+
+# Removed:
+test_command                 # replaced by test_commands
+```
+
 ### Agent Checklist
 
 When migrating an outpost state file:
@@ -409,12 +464,13 @@ When migrating an outpost state file:
 | `## Reactivation Checklist` | yes (dormant) | Conditions that must be true before reactivating. No minimum item count. Used when `status: dormant` |
 | `## Blockers` | yes | What's stopped and why. "None." if empty |
 | `## Health Risks` | yes | Degradations that don't stop work but should be tracked (broken typecheck, failing lint, strategic gates). "None." if empty |
+| `## Health metrics` | no | Optional; knowledge-base/audit outposts may add inline health evidence (source count, quote placeholders, quality flags, etc.) instead of or in addition to the frontmatter `health_metrics` map |
 | `## Compliance Gaps` | yes | Standards violations with fixes. "None." if clean |
 | `## Long-Term Direction` | yes | Phases, milestones, 6-12 month vision, thresholds |
 | `## Open Decisions` | yes | Questions waiting on input. "None." if empty |
 | `## Decisions` | yes | Reverse-chronological decision log |
 | `## Repo Notes` | yes | Gotchas, surprises for future agents |
-| `## Links` | no | Wikilinks to related files |
+| `## Links` | no | Wikilinks to related files. For cross-vault links, prefix with the target outpost slug (e.g. `[[aporium:wiki/index.md]]`) to resolve in the linked vault's root context |
 | `## Template Feedback` | yes (on init/review) | Where the template falls short for this outpost. How ADAMA improves |
 
 ## Enums
@@ -454,6 +510,9 @@ When migrating an outpost state file:
 
 ### repo_layout
 `standard` | `submodule-superproject` | `monorepo`
+
+### compliance
+`compliant` (file EXISTS AND meets standards) | `partial` (file exists but has gaps) | `missing` (file does not exist)
 
 ### owner_type
 `human` | `agent` | `team`

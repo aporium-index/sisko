@@ -11,6 +11,7 @@ timestamp: 2026-06-28
 ## Every Outpost Must Have
 1. **`AGENTS.md`** in repo root — tells any agent how to work in that repo.
 2. **`<slug>-state.md`** in repo root — status, state, condition, next actions, decisions. This is the outpost's interface to ADAMA.
+   *Exception:* iCloud-synced vault outposts may place the state file externally under `workspace/<slug>/` with a symlink in `ADAMA/outposts/`. Document the external location in `location_note` and ensure the symlink always resolves.
 3. **`.gitignore`** — minimum: `.DS_Store`, `node_modules/`, `.venv/`, `__pycache__/`, `.tmp/`
 
 ## Agent Startup Protocol
@@ -32,7 +33,7 @@ The `## Full Backlog` section (per `outpost-state.md` template) holds all next a
 ## Backlog Hygiene
 - **Mark done immediately.** When you complete a backlog item, mark it `[x]` in the same commit. Never leave completed work as `[ ]` — it causes duplicate suggestions and makes the outpost look idle.
 - **Never suggest already-taken actions.** Before proposing a next action, verify it isn't already done or in progress. Read the backlog and recent git log before suggesting.
-- **End every message with suggestions.** The human should never have to ask "what's next?" — the agent's final message should surface 1-3 concrete next actions from the backlog, ranked by impact.
+- **End every message with 3 next actions.** Never end with fewer than 3 concrete next actions from the backlog, ranked by impact. If fewer than 3 exist in the backlog, add a discovery or verification action — the human should never have to ask "what's next?".
 
 ## Git: Always Commit + Push
 After every session, commit all changes and push to remote. No uncommitted work lingers between sessions. No stash-and-forget. If work is incomplete, commit with `WIP:` prefix and push. ADAMA considers `last_active` stale if there's no push within `stale_threshold_days`.

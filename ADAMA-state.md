@@ -23,14 +23,16 @@ repo_type: github
 default_branch: master
 repo_layout: standard
 submodule_count: 0
-test_command: null
+test_commands: null
 ci: false
 hardware_requirements: null
 evidence_as_of: null
 verification_scope: null
+repositories: null
+health_metrics: null
 sensitivity: internal
-has_agents_md: true
-has_gitignore: true
+has_agents_md: compliant
+has_gitignore: compliant
 phase: outpost
 maturity: stable
 status: null
@@ -40,22 +42,23 @@ criticality: tier-0
 owner: josh
 owner_type: human
 last_active: 2026-06-28
+last_content_activity: 2026-06-28
 last_code_activity: 2026-06-28
 last_push: 2026-06-28
 last_checkin: 2026-06-28
 timestamp: 2026-06-28
 stale_threshold_days: 7
 depends_on: []
-depended_on_by: [_aporium, basicly, jamboree, quotaz, prosodymaker, mac-optimization-audit, rejoy]
+depended_on_by: [_aporium, basicly, jamboree, quotaz, neocouth, mac-optimization-audit, rejoy]
 tags: [control-plane, meta, markdown, standards, dashboard]
-file_version: "1.4"
+file_version: "1.5"
 ---
 
 # ADAMA
 
 ## Current Focus
 
-All three state files touched up to v1.4 (jamboree, quotaz, mac-optimization-audit). All template feedback from jamboree (9), quotaz (9), and mac-optimization-audit (6) resolved and struck through. Next: roll init to ml-feedback-program.
+Aporium template feedback (12 items) resolved in standards v1.5 — new fields, tri-state compliance, multi-repo support, test_commands list, OKF profiles, cross-vault links. Next: roll init to ml-feedback-program, migrate remaining outposts to v1.5.
 
 ## Full Backlog
 
@@ -72,6 +75,8 @@ All three state files touched up to v1.4 (jamboree, quotaz, mac-optimization-aud
 - [x] **Touch up jamboree-state.md** — v1.4 fields applied, Health Risks added, all 9 feedback items struck through, top-3 marking aligned
 - [x] **Touch up quotaz-state.md** — v1.4 fields applied, Blockers/Health Risks split, all 9 feedback items struck through
 - [x] **Touch up mac-optimization-audit-state.md** — evidence_as_of, verification_scope, documentation interface, Reactivation Checklist, all 6 feedback items struck through
+- [x] **Template v1.5: 12 Aporium feedback items resolved** — `last_content_activity`, `repositories`, `health_metrics`, `test_commands`, tri-state compliance (`compliant|partial|missing`), OKF compatibility profiles, external-state exception, cross-vault link syntax, review-packet version pinning, v1.5 migration diff
+- [ ] Migrate remaining outposts to v1.5: _aporium, basicly, jamboree, quotaz, neocouth, mac-optimization-audit
 - [ ] Dashboard as persistent background service (launchd) — currently manual start via Serve Dashboard.command
 - [ ] AGENTS.md rollout for jamboree, quotaz, ml-feedback-program (see dashboard.md compliance table)
 - [ ] Versioned release process for standards — CHANGELOG or version bump automation
@@ -170,7 +175,7 @@ This is ADAMA reviewing its own template. Gaps tracked from init reviews. Resolv
 
 7. ~~**Audit checklist didn't verify .gitignore contents.**~~ **Resolved** — init-outpost.md now checks contents, not just existence.
 
-8. ~~**`has_gitignore: true` conflates existence with compliance.**~~ **Resolved** — v1.2 convention: `has_gitignore`/`has_agents_md` are true only if file exists AND meets standards. Non-compliant → false + gap in `## Compliance Gaps`.
+8. ~~**`has_gitignore: true` conflates existence with compliance.**~~ **Resolved** — v1.5: tri-state enum (`compliant | partial | missing`) replaces boolean.
 
 9. ~~**Model orchestration stacks (jamboree feedback #3).**~~ **Resolved** — v1.2 adds `runtimes` and `models` optional list fields.
 
@@ -178,6 +183,22 @@ This is ADAMA reviewing its own template. Gaps tracked from init reviews. Resolv
 
 11. ~~**Submodule superprojects (jamboree feedback #5).**~~ **Resolved** — v1.2 adds `repo_layout` and `submodule_count` fields.
 
-12. ~~**Verification commands (jamboree feedback #7).**~~ **Resolved** — v1.2 adds `test_command`, `ci`, `hardware_requirements` fields.
+12. ~~**Verification commands (jamboree feedback #7).**~~ **Resolved** — v1.5: `test_command` replaced by `test_commands` named verification list.
 
 13. ~~**Admin vs substantive activity (jamboree feedback #8).**~~ **Resolved** — v1.2 adds `last_code_activity` temporal field.
+
+14. ~~**Markdown activity misclassified (aporium feedback #1).**~~ **Resolved** — v1.5 adds `last_content_activity` for content-primary outposts.
+
+15. ~~**Single test_command too narrow (aporium feedback #5).**~~ **Resolved** — v1.5 replaces with `test_commands` named list.
+
+16. ~~**Compliance booleans hide partial states (aporium feedback #6).**~~ **Resolved** — v1.5 tri-state enum (`compliant|partial|missing`).
+
+17. ~~**Knowledge-base health needs evidence metrics (aporium feedback #7).**~~ **Resolved** — v1.5 adds `health_metrics` map.
+
+18. ~~**Split-topology repo record (aporium feedback #2).**~~ **Resolved** — v1.5 adds `repositories` map.
+
+19. ~~**State-location rule (aporium feedback #3).**~~ **Resolved** — external-state exception added to standards/agents.md.
+
+20. ~~**OKF compatibility profiles (aporium feedback #4).**~~ **Resolved** — added to standards/okf.md.
+
+21. ~~**Cross-vault links (aporium feedback #9).**~~ **Resolved** — outpost-prefixed wikilink syntax defined in standards/outpost-state.md.
