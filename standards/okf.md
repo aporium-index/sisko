@@ -1,3 +1,9 @@
+---
+type: standard
+tags: [okf, frontmatter, conventions]
+timestamp: 2026-06-28
+---
+
 # Standard: OKF Frontmatter Convention
 
 <!-- Context: sisko/standards | Priority: high | Version: 1.0 | Updated: 2026-06-28 -->

@@ -1,38 +1,49 @@
+---
+type: guide
+tags: [sisko, agents, control-plane]
+timestamp: 2026-06-28
+---
+
 # sisko
 
-<!-- Context: sisko/root | Priority: critical | Version: 1.0 | Updated: 2026-06-28 -->
-
-Control plane for all workspace projects. sisko oversees — projects execute.
+Control plane for all workspace outposts. sisko oversees — outposts execute.
 
 ## Purpose
-Single source of truth for project status, priorities, standards, and cross-project memory. Agents read this first.
+Single source of truth for outpost status, priorities, standards, and cross-outpost coordination. Agents read this first.
 
 ## Architecture
-sisko is a polyrepo overseer. Each project under `workspace/` is self-contained with its own `AGENTS.md` and `PROJECT.md`. sisko points to them but does not own them.
+sisko is a polyrepo overseer. Each outpost under `workspace/` is self-contained with its own `AGENTS.md` and `<slug>-state.md`. sisko's `outposts/` directory contains symlinks to each state file — no duplication.
 
 ```
 workspace/
 ├── sisko/              ← Control plane (this repo)
+│   ├── outposts/       ← Symlinks to state files
+│   │   ├── aporium-state.md → ../../_aporium/aporium-state.md
+│   │   ├── basicly-state.md → ../../basicly/basicly-state.md
+│   │   └── ...
+│   ├── standards/      ← Conventions that span all outposts
+│   ├── dashboard.md    ← Derived view from state file frontmatter
+│   └── hot.md          ← Chronological change log
+├── _aporium/           ← iCloud vault dev-state
 ├── basicly/
 ├── jamboree/
 └── ...
 ```
 
 ## How agents should use sisko
-1. **Start here.** Read `dashboard.md` for current priorities.
-2. **Check `PROJECTS.md`** for the manifest and status of all projects.
-3. **Read the target project's `PROJECT.md`** before working on it.
-4. **Update after every session.** Append to `sessions/YYYY-MM-DD.md` and update `dashboard.md` if priorities changed.
-5. **Follow `standards/`** for conventions that apply across projects.
+1. **Read `dashboard.md`** for current outpost states, priorities, and blockers.
+2. **Read the target outpost's state file** via the symlink in `outposts/`.
+3. **Read the outpost's `AGENTS.md`** for repo-specific rules.
+4. **Follow `standards/`** for conventions that apply across outposts.
 
 ## Rules
 - sisko is Markdown-first. No databases, no APIs, no build steps.
-- One file per project in `projects/`. One file per session in `sessions/`.
-- `dashboard.md` must stay under 200 lines. Archive old state to sessions.
-- Every change to priorities or status must update `dashboard.md` and the affected `projects/*.md`.
-- Never delete session files — they are the cross-project memory.
+- Outposts own their state files. sisko points to them via symlinks.
+- `dashboard.md` is derivable — always verifiable against state file frontmatter.
+- Every outpost must commit + push after every session.
+- No session files. OpenCode logs sessions. sisko uses `hot.md` for chronological context.
 
 ## Related
-- `PROJECTS.md` — full manifest
-- `dashboard.md` — current operating state
+- `dashboard.md` — derived view of all outpost states
+- `hot.md` — chronological change log
 - `standards/` — conventions

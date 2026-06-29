@@ -1,41 +1,61 @@
+---
+type: reference
+tags: [dashboard, derived]
+timestamp: 2026-06-28
+---
+
 # Dashboard
 
-<!-- Context: sisko/concepts | Priority: critical | Version: 1.0 | Updated: 2026-06-28 -->
+> Derived from `outposts/*.md` symlinks. Rebuilt 2026-06-28.
 
-**Purpose**: Current operating state. What's active, what's blocked, what's next. Keep under 200 lines.
+## Active Outposts
 
-## Current Focus
-- **sisko bootstrap** — building the control plane scaffold (this session)
-- **workspace rename** — `Code Projects` → `workspace` done. Stale path references partially cleaned.
+| Outpost | State | Condition | Priority | Tier | Last Active | Focus |
+|---|---|---|---|---|---|---|
+| [[outposts/sisko-state\|sisko]] | operational | condition-green | P1 | tier-0 | 2026-06-28 | Architecture consolidation: symlink-based tracking, derived dashboard |
+| [[outposts/_aporium-state\|Aporium]] | operational | condition-green | P1 | tier-1 | 2026-06-28 | sisko bootstrap — defining control plane standards |
+| [[outposts/basicly-state\|basicly]] | operational | condition-green | P2 | tier-2 | 2026-06-28 | Transitioning from spike to implementation |
+| [[outposts/jamboree-state\|jamboree]] | operational | condition-green | P2 | tier-2 | 2026-06-28 | Local audio pipeline integration |
+| [[outposts/quotaz-state\|quotaz]] | operational | condition-green | P3 | tier-2 | 2026-06-28 | Pipeline automation active |
+| [[outposts/prosodymaker-state\|prosodymaker]] | operational | condition-green | P3 | tier-3 | 2026-06-28 | Tracker/logs-based iteration (v0.55.0) |
 
-## Active Projects
+## Maintenance / Dormant
 
-| Project | Status | Next Action | Blocker? |
-|---|---|---|---|
-| sisko | bootstrapping | Write project files, standards, session record | — |
-| Aporium | active | [[Aporium#Open Questions\|hot.md questions]] | — |
-| basicly | developing | ? | Need check-in |
-| jamboree | developing | ? | Need check-in |
-| quotaz | developing | ? | Need check-in |
-| prosodymaker | developing | ? | Need check-in |
+| Outpost | State | Condition | Priority | Tier | Last Active | Focus |
+|---|---|---|---|---|---|---|
+| [[outposts/ml-feedback-program-state\|ml-feedback-program]] | dormant | — | P4 | tier-3 | 2026-06-26 | Dormant — needs discovery |
+| [[outposts/mac-optimization-audit-state\|mac-optimization-audit]] | dormant | — | P4 | tier-3 | 2026-06-20 | Reference documentation only |
 
-## Blocked / Waiting
-_None recorded yet. This section is for anything stuck on external input, decisions, or dependencies._
+## Blockers
 
-## Decisions Needed
-- **Obsidian-skills install**: adopt [[kepano/obsidian-skills]] for all Aporium agents? (P0, 5 min)
-- **OKF standardization**: apply OKF frontmatter to sisko + Aporium? (P0, 30 min)
-- **AGENTS.md rollout**: write AGENTS.md for each active project? (P1)
-- **Aporium dev-state boundary**: clean up `.opencode/node_modules` in vault? (P2)
-
-## Recent Sessions
-- [[sessions/2026-06-28|2026-06-28]] — sisko bootstrap, workspace rename, Aporium branch cleanup + witty-otter partial merge
+*None.*
 
 ## Control Plane Health
-- sisko repo: ✓ initialized
-- PROJECTS.md: ✓ populated
-- projects/*.md: 3 of 10 written
-- standards/: pending
-- sessions/: 1 recorded
 
-**Last Updated**: 2026-06-28
+- Outposts: 8 total (6 operational, 2 dormant)
+- Condition: 6 green, 0 yellow, 0 red, 0 adrift
+- Compliance: 11/16 (see below)
+- Standards: 5 files (agents, git, okf, outpost-state, dashboard-derivation)
+
+### Compliance
+
+| Outpost | AGENTS.md | .gitignore |
+|---|---|---|
+| sisko | ✓ | ✓ |
+| Aporium | ✓ | ✓ |
+| basicly | ✓ | ✗ |
+| jamboree | ✗ | ✓ |
+| quotaz | ✗ | ✓ |
+| prosodymaker | ✓ | ✓ |
+| mac-optimization-audit | ✗ | ✗ |
+| ml-feedback-program | ✗ | ✗ |
+
+## Recent Activity
+
+Outposts active in past 7 days:
+- **sisko**, **Aporium**, **basicly**, **jamboree**, **quotaz**, **prosodymaker** — 2026-06-28
+- **ml-feedback-program** — 2026-06-26
+- **mac-optimization-audit** — 2026-06-20
+
+---
+*To verify: read all `outposts/*.md` frontmatter and recompute.*
