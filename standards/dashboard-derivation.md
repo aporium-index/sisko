@@ -43,6 +43,7 @@ Every `.md` file in `outposts/` is a symlink to a real state file in its repo. T
 | Tier | `criticality` | Raw value |
 | Last Active | `last_active` | Date, with staleness indicator if threshold exceeded |
 | Last Code | `last_code_activity` | Date of last non-state/non-docs commit. Falls back to `last_active` if absent. |
+| Last Push | `last_push` | Date of last successful `git push` to remote. Falls back to `last_active` if absent. |
 | Focus | — | First line of `## Current Focus` body section |
 
 ### Sorting
@@ -180,6 +181,12 @@ brief ──► survey ──► outpost
 
 {{ range outposts where blockers present }}
 - **{{name}}**: {{blocker_summary}}
+{{ end }}
+
+## Health Risks
+
+{{ range outposts where health_risks present }}
+- **{{name}}**: {{risk_summary}}
 {{ end }}
 
 ## Control Plane Health

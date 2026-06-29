@@ -10,6 +10,16 @@ Chronological change log for the workspace. Newest at top.
 
 ## 2026-06-28
 
+### ADAMA — Template v1.3 (6 quotaz feedback items)
+- `models` → `local_models` (evaluators catalog remote models but load none locally)
+- `platform` split into `interfaces` (cli/web/tui/api/gui) + `platform` (macos/linux/cross-platform)
+- `## Health Risks` body section — degradations that don't stop work (broken typecheck, strategic gates)
+- `stack_categories` optional map — `{runtime: [...], test: [...], build: [...]}` when `frameworks` is lossy
+- `maturity` enum — `prototype`/`pre-release`/`stable` — distinguishes working-but-pre-decision from committed
+- `last_push` temporal field — date of last successful git push, distinguishes local activity from remote sync
+- init-outpost.md + dashboard-derivation.md updated for all new fields
+- file_version bumped to 1.3
+
 ### ADAMA — Template v1.2 (6 open jamboree feedback items)
 - `runtimes` + `models` optional list fields (orchestration stacks)
 - `platform` changed scalar → list of enum (hybrid platforms)

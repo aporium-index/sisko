@@ -14,8 +14,10 @@ primary_language: markdown
 languages: [python]
 frameworks: []
 runtimes: []
-models: []
+local_models: []
+interfaces: [web]
 platform: [cross-platform]
+stack_categories: {}
 repo_url: https://github.com/aporium-index/ADAMA
 repo_type: github
 default_branch: master
@@ -28,6 +30,7 @@ sensitivity: internal
 has_agents_md: true
 has_gitignore: true
 phase: outpost
+maturity: stable
 status: null
 condition: condition-green
 priority: P1
@@ -36,20 +39,21 @@ owner: josh
 owner_type: human
 last_active: 2026-06-28
 last_code_activity: 2026-06-28
+last_push: 2026-06-28
 last_checkin: 2026-06-28
 timestamp: 2026-06-28
 stale_threshold_days: 7
 depends_on: []
 depended_on_by: [_aporium, basicly, jamboree, quotaz, prosodymaker, mac-optimization-audit, ml-feedback-program]
 tags: [control-plane, meta, markdown, standards, dashboard]
-file_version: "1.2"
+file_version: "1.3"
 ---
 
 # ADAMA
 
 ## Current Focus
 
-Template v1.2 landed: 6 open jamboree feedback items resolved (orchestration stacks, hybrid platforms, submodule superprojects, compliance booleans, verification commands, admin vs code activity). Next: touch up jamboree, roll init to quotaz.
+Template v1.3 landed: 6 quotaz feedback items resolved (`local_models` rename, `interfaces`/`platform` split, `## Health Risks` section, `stack_categories` map, `maturity` field, `last_push` temporal). Next: touch up jamboree + quotaz state files to v1.3, roll init to remaining outposts.
 
 ## Full Backlog
 
@@ -60,12 +64,20 @@ Template v1.2 landed: 6 open jamboree feedback items resolved (orchestration sta
 - [x] **Rename legacy `SISKO_ROOT` variable in bin/serve** — all 3 references renamed to `ADAMA_ROOT`
 - [x] **Standards self-consistency check** — `bin/check-standards` script: 7 checks for retired enums, field names, section names, legacy names; run after any standards change
 - [x] **Implement 6 open template feedback items from jamboree** — v1.2: `runtimes`/`models` fields, `platform` → list, `repo_layout`/`submodule_count`, compliance booleans = compliant not just exists, `test_command`/`ci`/`hardware_requirements`, `last_code_activity`
+- [x] **Template v1.3: 3 adopt-now quotaz items** — `models` → `local_models`, split `platform` into `interfaces` + `platform`, added `## Health Risks` body section
+- [x] **Template v1.3: 3 worth-considering quotaz items** — `stack_categories` map for structured stack, `maturity` enum (prototype/pre-release/stable), `last_push` temporal field
+- [ ] Touch up jamboree-state.md — apply v1.3 fields, strike through resolved feedback, align top-3 marking
+- [ ] Touch up quotaz-state.md — apply v1.3 fields (`local_models`, `interfaces`, `stack_categories`, `maturity`, `last_push`, `## Health Risks`)
 - [ ] Dashboard as persistent background service (launchd) — currently manual start via Serve Dashboard.command
 - [ ] AGENTS.md rollout for jamboree, quotaz, mac-optimization-audit, ml-feedback-program (see dashboard.md compliance table)
 - [ ] Versioned release process for standards — CHANGELOG or version bump automation
 - [ ] Consider enriching README.md (currently a stub: `# ADAMA`)
 
 ## Blockers
+
+None.
+
+## Health Risks
 
 None.
 
@@ -96,6 +108,7 @@ Threshold: when all non-dormant outposts reach `outpost` phase with `condition-g
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-06-28 | Template v1.3 — 6 quotaz feedback items | `models`→`local_models`, split `platform` into `interfaces`+`platform`, `## Health Risks` body section, `stack_categories` map, `maturity` enum, `last_push` temporal. All additive |
 | 2026-06-28 | Template v1.2 — 6 open jamboree feedback items resolved | Added `runtimes`, `models`, `repo_layout`, `submodule_count`, `test_command`, `ci`, `hardware_requirements`, `last_code_activity`; `platform` scalar→list; compliance booleans now mean compliant not just exists; `primary_framework` omit-when-none convention. All additive — no state file breaks |
 | 2026-06-28 | Added `bin/check-standards` self-consistency script | dashboard-derivation.md drifted from outpost-state.md after phase model; a grep for retired values catches this class of error. 7 checks, all passing |
 | 2026-06-28 | Renamed `SISKO_ROOT` → `ADAMA_ROOT` in bin/serve | Last sisko→ADAMA rename leftover; cosmetic but confusing for future agents |

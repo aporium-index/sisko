@@ -15,10 +15,10 @@ Every repo carries one status file: `<slug>-state.md`. ADAMA's `outposts/` direc
 | Identity, description, location, stack | Outpost agent or human | At init, then on change |
 | Repository layout, verification | Outpost agent | At init, then on change |
 | Compliance fields | Outpost agent | Re-checked on every session end |
-| Phase, condition, priority, criticality, owner | **ADAMA** (or human) | During check-in only |
+| Phase, maturity, condition, priority, criticality, owner | **ADAMA** (or human) | During check-in only |
 | Temporal fields | Automated | On every write |
 
-Outpost agents do NOT set `phase`, `condition`, `priority`, or `criticality`. They report issues in `## Blockers`. ADAMA assigns these during check-in.
+Outpost agents do NOT set `phase`, `maturity`, `condition`, `priority`, or `criticality`. They report issues in `## Blockers` and degradations in `## Health Risks`. ADAMA assigns these during check-in.
 
 ## Phases (lifecycle pipeline)
 
@@ -84,8 +84,10 @@ languages: []
 primary_framework: obsidian
 frameworks: []
 runtimes: []
-models: []
+local_models: []
+interfaces: [web]
 platform: [cross-platform]
+stack_categories: {}
 
 # ── Repository ──
 repo_url: https://github.com/aporium-index/aporium-vault
@@ -107,6 +109,7 @@ has_gitignore: true
 
 # ── Lifecycle (ADAMA-written) ──
 phase: survey
+maturity: null
 status: null
 condition: condition-green
 
@@ -121,6 +124,7 @@ owner_type: human
 # ── Temporal ──
 last_active: 2026-06-28
 last_code_activity: 2026-06-28
+last_push: 2026-06-28
 last_checkin: 2026-06-28
 timestamp: 2026-06-28
 stale_threshold_days: 14
@@ -131,7 +135,7 @@ depended_on_by: []
 
 # ── Meta ──
 tags: [knowledge-base, obsidian, wiki, llm]
-file_version: "1.2"
+file_version: "1.3"
 ---
 
 # {{ name }}
@@ -149,6 +153,10 @@ OKF frontmatter retrofit on wiki pages. Branch cleanup complete.
 - [ ] Raw provenance repair wave
 
 ## Blockers
+
+None.
+
+## Health Risks
 
 None.
 
@@ -222,10 +230,12 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 | `primary_language` | yes | string | Outpost |
 | `languages` | no | list | Outpost |
 | `primary_framework` | no | string | Outpost — omit if none |
-| `frameworks` | no | list | Outpost — libraries/SDKs the code imports |
+| `frameworks` | no | list | Outpost — runtime libraries/SDKs the code imports |
 | `runtimes` | no | list | Outpost — host environments (e.g., `ableton-live-12`, `python-3.11`) |
-| `models` | no | list | Outpost — ML model artifacts loaded at runtime (e.g., `demucs-htdemucs`) |
-| `platform` | no | list of enum | Outpost — list, single value for most outposts |
+| `local_models` | no | list | Outpost — local ML model artifacts loaded at runtime (e.g., `demucs-htdemucs`). Empty for outposts that call remote models but load none locally |
+| `interfaces` | no | list of enum | Outpost — user-facing interfaces (e.g., `cli`, `web`, `tui`, `api`) |
+| `platform` | no | list of enum | Outpost — OS/portability (e.g., `macos`, `linux`, `cross-platform`) |
+| `stack_categories` | no | map | Outpost — structured breakdown: `{runtime: [...], test: [...], build: [...], sdk: [...]}`. Optional; use when `frameworks` flattening is lossy |
 
 ### Repository
 | Field | Required | Type | Set by |
@@ -254,6 +264,7 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
 | `phase` | yes | enum | ADAMA |
+| `maturity` | no | enum | ADAMA — distinguishes a working prototype awaiting decisions from a committed build |
 | `status` | no | enum | ADAMA |
 | `condition` | no | enum | ADAMA |
 
@@ -272,8 +283,9 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 ### Temporal
 | Field | Required | Type | Set by |
 |-------|----------|------|--------|
-| `last_active` | yes | date | Automated — any push |
+| `last_active` | yes | date | Automated — any commit |
 | `last_code_activity` | no | date | Automated — last commit touching non-state, non-docs files |
+| `last_push` | no | date | Automated — last successful `git push` to remote |
 | `last_checkin` | yes | date | Automated |
 | `timestamp` | yes | date | Automated |
 | `stale_threshold_days` | no | int | ADAMA |
@@ -292,6 +304,7 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 | `## Current Focus` | yes | What's being worked on. One sentence |
 | `## Full Backlog` | yes | All next actions, prioritized. Top 3 marked with bold label prefix |
 | `## Blockers` | yes | What's stopped and why. "None." if empty |
+| `## Health Risks` | yes | Degradations that don't stop work but should be tracked (broken typecheck, failing lint, strategic gates). "None." if empty |
 | `## Compliance Gaps` | yes | Standards violations with fixes. "None." if clean |
 | `## Long-Term Direction` | yes | Phases, milestones, 6-12 month vision, thresholds |
 | `## Open Decisions` | yes | Questions waiting on input. "None." if empty |
@@ -328,6 +341,12 @@ Wikilinks resolve within Aporium's vault context, not ADAMA's.
 
 ### platform (list of enum)
 `macos` | `web` | `cli` | `cross-platform` | `cloud` | `linux`
+
+### interfaces (list of enum)
+`cli` | `web` | `tui` | `api` | `gui` | `none`
+
+### maturity
+`prototype` (works but pre-decision) | `pre-release` (feature-complete, polishing) | `stable` (production-ready). Null when phase is `brief` or outpost is clearly committed.
 
 ### repo_layout
 `standard` | `submodule-superproject` | `monorepo`

@@ -64,18 +64,20 @@ The state file already exists. Update it:
 - slug, name, category, domain — identity
 - description — move any existing body description here
 - location — path on disk
-- primary_language, languages, frameworks, runtimes, models, platform — from exploration
+- primary_language, languages, frameworks, runtimes, local_models, interfaces, platform — from exploration
+- stack_categories — optional; use when `frameworks` flattening is lossy (e.g., `{runtime: [...], test: [...], build: [...]}`)
 - repo_url, repo_type, default_branch, repo_layout, submodule_count — from exploration
 - test_command, ci, hardware_requirements — from exploration (null/false if none)
 - has_agents_md, has_gitignore — set true ONLY if file exists AND meets standards
-- last_active, last_code_activity, last_checkin, timestamp — set to today
+- last_active, last_code_activity, last_push, last_checkin, timestamp — set to today
 - tags — 3-5 keywords
-- file_version — set to "1.2"
+- file_version — set to "1.3"
 
 To find `last_code_activity`: `git log --format='%cd' --date=short -- ':!*-state.md' ':!AGENTS.md' ':!*.md' | head -1`
+To find `last_push`: `git log origin/<default_branch> -1 --format='%cd' --date=short`
 
 **YAML fields to NOT touch:**
-- phase, status, condition — ADAMA assigns
+- phase, maturity, status, condition — ADAMA assigns
 - priority, criticality — ADAMA assigns
 - owner, owner_type — ADAMA assigns
 - depends_on, depended_on_by — ADAMA assigns
@@ -84,7 +86,8 @@ To find `last_code_activity`: `git log --format='%cd' --date=short -- ':!*-state
 
 - `## Current Focus` — what's being worked on now. One sentence based on git log and dirty files.
 - `## Full Backlog` — all next actions in priority order. Mark the **top 3** with a bold label prefix (e.g., `**Top 1:**`, `**Top 2:**`, `**Top 3:**`) so the immediate focus is unambiguous. Remaining items follow as plain checkboxes.
-- `## Blockers` — anything preventing progress. "None." if empty.
+- `## Blockers` — hard inability to proceed (missing dependency, broken build, missing access). "None." if empty.
+- `## Health Risks` — degradations that don't stop work but should be tracked (failing typecheck, placeholder tests, strategic gates awaiting input). "None." if empty.
 - `## Compliance Gaps` — each gap cites the specific standard and fix.
 - `## Long-Term Direction` — phases, milestones, 6-12 month vision, thresholds that would change phase or priority.
 - `## Open Decisions` — questions waiting on input. "None." if empty.
