@@ -55,7 +55,7 @@ file_version: "1.4"
 
 ## Current Focus
 
-Template v1.4: 5 mac-optimization-audit feedback items resolved (stale has_gitignore note, dormant exemption, `documentation` interface, evidence provenance fields, freshness semantics). Next: touch up existing state files to current template, roll init to ml-feedback-program.
+All three state files touched up to v1.4 (jamboree, quotaz, mac-optimization-audit). All template feedback from jamboree (9), quotaz (9), and mac-optimization-audit (6) resolved and struck through. Next: roll init to ml-feedback-program.
 
 ## Full Backlog
 
@@ -69,9 +69,9 @@ Template v1.4: 5 mac-optimization-audit feedback items resolved (stale has_gitig
 - [x] **Template v1.3: 3 adopt-now quotaz items** — `models` → `local_models`, split `platform` into `interfaces` + `platform`, added `## Health Risks` body section
 - [x] **Template v1.3: 3 worth-considering quotaz items** — `stack_categories` map for structured stack, `maturity` enum (prototype/pre-release/stable), `last_push` temporal field
 - [x] **Template v1.4: 5 mac-optimization-audit items** — stale `has_gitignore` note removed, dormant exemption from top-three rule, `documentation` interface enum, `evidence_as_of`/`verification_scope` fields, freshness semantics in dashboard-derivation.md
-- [ ] Touch up jamboree-state.md — apply v1.4 fields, strike through resolved feedback, align top-3 marking
-- [ ] Touch up quotaz-state.md — apply v1.4 fields, strike through resolved feedback
-- [ ] Touch up mac-optimization-audit-state.md — add `evidence_as_of`/`verification_scope` fields, change `## Full Backlog` to `## Reactivation Checklist`, update `interfaces` to include `documentation`
+- [x] **Touch up jamboree-state.md** — v1.4 fields applied, Health Risks added, all 9 feedback items struck through, top-3 marking aligned
+- [x] **Touch up quotaz-state.md** — v1.4 fields applied, Blockers/Health Risks split, all 9 feedback items struck through
+- [x] **Touch up mac-optimization-audit-state.md** — evidence_as_of, verification_scope, documentation interface, Reactivation Checklist, all 6 feedback items struck through
 - [ ] Dashboard as persistent background service (launchd) — currently manual start via Serve Dashboard.command
 - [ ] AGENTS.md rollout for jamboree, quotaz, ml-feedback-program (see dashboard.md compliance table)
 - [ ] Versioned release process for standards — CHANGELOG or version bump automation
