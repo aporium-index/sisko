@@ -11,6 +11,8 @@ try:
     PORT = 8080
 
     class Handler(SimpleHTTPRequestHandler):
+        extensions_map = {**SimpleHTTPRequestHandler.extensions_map, '.md': 'text/plain; charset=utf-8'}
+
         def translate_path(self, path):
             p = posixpath.normpath(urllib.parse.unquote(path.split('?')[0].split('#')[0]))
             words = [w for w in p.split('/') if w and w != '..']
