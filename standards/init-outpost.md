@@ -6,162 +6,124 @@ timestamp: 2026-06-28
 
 # Standard: Outpost Initialization Prompt
 
-Copy this block into any outpost repo. The agent will create a state file for the control plane and report where the system falls short.
+Copy this block into any outpost repo. The agent will review the repo against ADAMA standards, update the state file, and report where the system falls short for this specific project.
 
 ```
-You are initializing this repo as a ADAMA outpost.
+You are initializing this repo for ADAMA, the workspace control plane.
 
 ## Concept
 
-ADAMA is a Markdown-based control plane in `workspace/ADAMA/`. Every outpost (this repo) carries a single state file — `<slug>-state.md` — with YAML frontmatter and a markdown body. ADAMA's dashboard reads these files to track status, compliance, and blockers across all outposts. The state file is the outpost's interface to the control plane.
+ADAMA (`workspace/ADAMA/`) is a Markdown-based control plane. Every outpost (this repo) carries a state file — `<slug>-state.md` — with YAML frontmatter and a markdown body. The dashboard reads these files to track status, compliance, and blockers. The state file is this outpost's only interface to the control plane.
 
-You are acting on behalf of this outpost. Your job: create the state file, fill in everything you can, and tell us where the system falls short for this specific repo.
+You are acting on behalf of this outpost. A state file already exists in this repo — your job is to review it, make it accurate, fill gaps, and report where the ADAMA template and standards fall short for this specific project.
 
-## Rules
-- Do NOT read any ADAMA files. This prompt is all the context you need.
-- Do NOT set `state`, `condition`, `priority`, or `criticality`. ADAMA assigns those.
-- Fill in what you can. Mark what you can't.
-- Be honest about gaps. The template is a draft — your feedback improves it.
+## Step 1 — Read the Standards
 
-## Step 1 — Explore This Repo
+Read these files to understand what's expected of every outpost:
+
+1. `workspace/ADAMA/standards/outpost-state.md` — the state file template (required fields, enums, who-writes-what)
+2. `workspace/ADAMA/standards/agents.md` — agent behavior rules (AGENTS.md required, 3 next actions, commit+push)
+3. `workspace/ADAMA/standards/git.md` — git conventions (.gitignore, branch policy, commit format)
+4. `workspace/ADAMA/standards/okf.md` — frontmatter convention (--- fences, type, tags, timestamp)
+
+## Step 2 — Explore This Repo
 
 Investigate thoroughly:
-- What does this project do? Read README, docs, handoff files, package manifests.
+- What does this project do? Read README, docs, package manifests, handoff files.
 - What's the stack? Language, frameworks, build tools, package manager, platform.
 - What's active? `git log --oneline -10`, `git status --short`
 - What's the repo structure? Key directories, entry points, config files.
 - Are there tests? Linting? Typechecking? How do you run them?
+- What are the long-term ambitions? Phases? Milestones? What's the vision past the current focus?
+- What's the next 6-12 months look like? Any known inflection points?
 - Anything unusual? Unconventional layout, legacy cruft, iCloud constraints, missing tooling.
 
-## Step 2 — Create the State File
+## Step 3 — Audit Against Standards
 
-Create `<slug>-state.md` at the repo root. The slug is this repo's directory name. Use this template:
+Compare this repo against ADAMA standards. For each standard, flag: met, not met, or not applicable.
 
-```markdown
----
-slug: <repo-dir-name>
-name: <human-readable name>
-category: <application|library|tool|infrastructure|knowledge-base|audit|brand|experiment|control-plane>
-domain: <one-word area>
-sensitivity: <public|internal|confidential|restricted>
-primary_language: <language>
-languages: [<list>]
-primary_framework: <or "none">
-frameworks: [<list>]
-platform: <macos|web|cli|cross-platform|cloud|unknown>
-repo_url: <github url or "local">
-repo_type: <github|local|bare|none>
-default_branch: <main or master>
-has_agents_md: <true/false>
-has_gitignore: <true/false>
-state: operational
-condition: condition-green
-priority: P2
-criticality: tier-2
-owner: josh
-owner_type: human
-last_active: <today>
-last_checkin: <today>
-timestamp: <today>
-stale_threshold_days: 14
-depends_on: [<slugs>]
-depended_on_by: []
-tags: [<3-5 keywords>]
-file_version: "1.0"
----
+| Standard | Check | Source |
+|----------|-------|--------|
+| AGENTS.md exists | `ls AGENTS.md` | standards/agents.md § Every Outpost Must Have |
+| .gitignore covers minimum | Has `.DS_Store`, `node_modules/`, `.venv/`, `__pycache__/`, `.tmp/` | standards/git.md § Repo Structure |
+| Single default branch | `git branch` — only main or master, no stale branches | standards/git.md § Branch Policy |
+| Recent push | `git log origin/main -1` — pushed within stale_threshold_days | standards/git.md § Always Commit + Push |
+| OKF frontmatter valid | State file has `---` fences, `type` field present | standards/okf.md § Required Fields |
+| All required fields present | Compare state file against template field reference | standards/outpost-state.md § Field Reference |
+| has_agents_md accurate | Matches reality | standards/outpost-state.md |
+| has_gitignore accurate | Matches reality | standards/outpost-state.md |
+| last_active current | Within stale_threshold_days | standards/outpost-state.md |
 
-# <name>
+For each gap: describe the specific standard being violated and what the fix is.
 
-<One paragraph describing what this project is and does.>
+Collect any next actions discovered during the audit. Do NOT limit yourself to 3 — list every concrete improvement this repo needs, prioritized. The state file will show the top 3, but report all of them.
 
-## Location
+## Step 4 — Update the State File
 
-`workspace/<slug>/`
+The state file already exists. Update it:
 
-## Current Focus
-
-<One sentence. What's actually being worked on right now, based on git log and dirty files.>
-
-## Next Actions
-
-- [ ] <Concrete action — biggest gap first>
-- [ ] <Concrete action>
-- [ ] <Concrete action>
-
-Exactly 3 items. No more, no less. Prioritize gaps found below.
-
-## Blockers
-
-<If none, write "None.">
-
-## Open Decisions
-
-<Questions waiting on input. If none, write "None.">
-
-## Decisions
-
-| Date | Decision | Rationale |
-|------|----------|-----------|
-| <today> | Initialized as ADAMA outpost | Created state file during outpost initialization |
-
-## Compliance Gaps
-
-<Every standard that is not met, one per line. Be specific.>
-
-- **<gap>** — <one-line fix or reason it cannot be fixed>
-- e.g. **No AGENTS.md** — create with repo-specific agent instructions
-- e.g. **.gitignore missing .venv/** — add `.venv/` to .gitignore
-- e.g. **No test suite** — no test command found; recommend adding `npm test`
-
-## Repo Notes
-
-<Special considerations for this repo. Anything an agent working here should know that isn't captured above. Gotchas, unusual setup, conventions.>
-
-## Template Feedback
-
-<How does the state file template fall short for THIS repo? What fields are confusing, missing, or overkill? What would you change about the control plane or standards to better support this outpost?>
-```
-
-## Step 3 — Fill In What You Can
-
-Frontmatter fields you should be able to determine from exploration:
+**Frontmatter fields to verify/correct:**
 - slug, name, category, domain, primary_language, languages, frameworks, platform
 - repo_url, repo_type, default_branch
-- has_agents_md, has_gitignore
-- last_active, last_checkin, timestamp
-- tags
+- has_agents_md, has_gitignore (set true/false based on audit)
+- last_active, timestamp (set to today)
+- tags (3-5 keywords)
 
-Frontmatter fields you CANNOT determine — leave as-is or mark unknown:
-- criticality, owner (these come from ADAMA)
-- depends_on, depended_on_by (cross-outpost knowledge)
+**Frontmatter fields to NOT touch:**
+- state, condition, priority, criticality (ADAMA assigns these)
+- owner, owner_type (ADAMA assigns these)
 
-Body sections:
-- `## Compliance Gaps` — audit exhaustively. Every file that should exist but doesn't. Every convention that's broken. Be specific.
-- `## Repo Notes` — anything surprising. Legacy baggage. Build quirks. "The test command is `./scripts/test.sh` not `npm test`."
-- `## Template Feedback` — this is the most important section. Where does the template fail for this specific repo? Is `category` missing a value? Does `platform` not apply? Is 3 next actions too rigid? What field needs to exist but doesn't?
+**Body sections to update:**
 
-## Step 4 — Git Commit + Push
+`## Current Focus` — what's actually being worked on right now, based on git log, dirty files, and project understanding. One sentence.
 
-Commit the state file and any other fixes you made:
+`## Next Actions` — top 3 prioritized from the full list you collected. The remaining items go in `## Full Backlog` below.
+
+`## Blockers` — anything preventing progress. If none, "None."
+
+`## Full Backlog` — NEW. All next actions discovered during audit, not just the top 3. Priority order. This gives ADAMA a broader view of the project's needs.
+
+`## Long-Term Direction` — NEW. Phases, milestones, ambitions beyond current focus. What's the 6-12 month vision? Known inflection points? Any thresholds that would change the project's state or priority?
+
+`## Open Decisions` — questions waiting on input. If none, "None."
+
+`## Decisions` — reverse-chronological log of important choices made. Each entry has date, decision, rationale. This is the project's institutional memory — why were choices made? What did we try that failed? An agent reading this 6 months later should understand the project's trajectory without reading git history.
+```
+| Date | Decision | Rationale |
+|------|----------|-----------|
+| 2026-01-15 | Chose SQLite over Postgres | Single-user app, zero ops burden |
+| 2026-02-01 | Rolled back WebSocket approach | Connection instability on mobile; replaced with polling |
+```
+
+`## Compliance Gaps` — renamed from before. Each gap with the specific standard it violates and the fix.
+```
+- **No AGENTS.md** (standards/agents.md §1) — create at repo root with `touch AGENTS.md`
+- **.gitignore missing .venv/** (standards/git.md § Repo Structure) — add line `.venv/`
+```
+
+`## Repo Notes` — special considerations, gotchas, surprises for future agents.
+
+`## Template Feedback` — where does the outpost-state template fall short for THIS repo? Are fields missing? Enums don't cover your case? Something confusing or overkill? What would you change about ADAMA's standards to better support this outpost?
+
+## Step 5 — Git Commit + Push
+
 ```
 git add <slug>-state.md
-git commit -m "chore: initialize outpost state file"
+git commit -m "maintenance: ADAMA init review — audit, update state, flag gaps"
 git push
 ```
 
-If the repo has no git remote, note it in `## Compliance Gaps`.
+## Step 6 — Report
 
-## Step 5 — Report
-
-Return:
 ```
-## Initialized: <name>
+## Init review: <name>
 
-### State file created
-<slug>-state.md — <N> frontmatter fields filled
+### Standards audit
+- <N> met, <N> not met, <N> gaps found
 
-### Compliance gaps
-- <list>
+### State file updated
+- <N> frontmatter fields corrected
+- Added: Full Backlog (<N> items), Long-Term Direction, updated Decisions
 
 ### Top template feedback
 - <most important suggestion>
