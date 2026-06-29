@@ -8,9 +8,21 @@ timestamp: 2026-06-28
 
 Chronological change log for the workspace. Newest at top.
 
-## 2026-06-28
-
 ## 2026-06-29
+
+### ADAMA — Dashboard rebuilt from state file frontmatter
+- Fixed compliance table: Aporium (✓✓→✗✗), jamboree (✗✓→✗✗), quotaz (✗✓→✗✗), prosodymaker (✓✓→✗✗), mac-optimization-audit (✗✗→✓✓)
+- Fixed 5 stale `last_active` dates: Aporium, jamboree, quotaz, prosodymaker, mac-optimization-audit
+- Added `Status` column per dashboard-derivation.md spec; `Description` → `Focus`
+- Compliance score corrected: 11/16 → 5/16
+- Dormant rows now show `—` for Phase (was conflating `phase` with `status`)
+
+### ADAMA — agents.md strengthened: end-of-message rule
+- Changed "1-3" to mandatory "exactly 3" concrete next actions
+- Rule now applies to reviews, feedback, and status checks — not just sessions
+- Fallback to `## Open Decisions` when backlog is fully complete
+
+## 2026-06-28
 
 ### ADAMA — Template v1.4 (5 mac-optimization-audit feedback items)
 - Removed stale `has_gitignore` note in init-outpost.md (said "true means file exists" — contradicted v1.2 convention)
